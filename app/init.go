@@ -2,6 +2,7 @@ package app
 
 import (
 	"github.com/revel/revel"
+	"SemiRevel/app/controllers"
 )
 
 var (
@@ -35,6 +36,8 @@ func init() {
 	// revel.OnAppStart(ExampleStartupScript)
 	// revel.OnAppStart(InitDB)
 	// revel.OnAppStart(FillCache)
+
+	revel.OnAppStart(controllers.InitDB)
 }
 
 // HeaderFilter adds common security headers
