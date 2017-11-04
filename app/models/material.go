@@ -9,5 +9,5 @@ type Material struct {
 	Day           uint64 `json:"day"`
 	Material_type uint64 `json:"material_type"`
 	File_path     string `json:"file_path"`
-	comment       string `json:"comment"`
+	Comment       string `json:"comment"`
 }
