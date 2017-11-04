@@ -21,15 +21,20 @@ func (c MaterialApi) GetMaterials() revel.Result {
 	DB.Table("materials").Select("materials.*, users.name, users.id").Joins("INNER JOIN users ON users.id = materials.user_id").Order("id desc").Limit(100).Scan(&materials)
 
 	response := JsonResponse{}
-	response.Response = materials // 結果を格納してあげる
+	response.Response = materials
 
 	return c.RenderJSON(response)
 }
 
 func (c MaterialApi) GetMaterial() revel.Result {
 
+	grade := c.Params.Route.Get("grade")
+
+	materials := []MaterialJoinsUser{}
+	DB.Table("materials").Select("materials.*, users.name, users.id").Joins("INNER JOIN users ON users.id = materials.user_id").Where("users.grade = ?", grade).Order("id desc").Limit(100).Scan(&materials)
+
 	response := JsonResponse{}
-	response.Response = "single article"
+	response.Response = materials
 
 	return c.RenderJSON(response)
 }

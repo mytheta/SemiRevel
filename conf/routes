@@ -11,7 +11,7 @@ POST    /SemiRevel/login                                     Authentication.Logi
 GET     /                                                    App.Index
 GET     /SemiRevel/materials                                 MaterialApi.GetMaterials
 POST    /SemiRevel/materials/:grade/:user_id                 MaterialApi.PostMaterial
-GET     /SemiRevel/materials/:grade/:user_id                 MaterialApi.GetMaterial
+GET     /SemiRevel/materials/:grade                         MaterialApi.GetMaterial
 GET     /SemiRevel/materials/:grade/:user_id/:materials_id   MaterialApi.ViewMaterial
 DELETE  /SemiRevel/materials/:grade/:user_id/:material_id    MaterialApi.DeleteMaterial
 
