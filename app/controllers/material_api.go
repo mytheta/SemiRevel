@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"SemiRevel/app/models"
+	"fmt"
+	"os"
 
 	"github.com/revel/revel"
 )
@@ -40,6 +42,13 @@ func (c MaterialApi) GetMaterial() revel.Result {
 }
 
 func (c MaterialApi) PostMaterial() revel.Result {
+
+	pwd, _ := os.Getwd()
+
+	err := os.Mkdir("materials", 0777)
+	fmt.Println(err)
+
+	fmt.Println(pwd)
 
 	response := JsonResponse{}
 	response.Response = "post article"
