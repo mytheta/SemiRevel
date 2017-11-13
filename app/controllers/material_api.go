@@ -3,7 +3,10 @@ package controllers
 import (
 	"SemiRevel/app/models"
 	"fmt"
+	"io"
 	"os"
+	"path/filepath"
+	"time"
 
 	"github.com/revel/revel"
 )
@@ -41,17 +44,73 @@ func (c MaterialApi) GetMaterial() revel.Result {
 	return c.RenderJSON(response)
 }
 
-func (c MaterialApi) PostMaterial() revel.Result {
+func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 
+	//時間を取得
+	time := time.Now()
+
+	year, month, date := time.Date()
+
+	intMonth := int(month)
+	//
+	// //MultipartReaderを用いて受け取ったファイルを読み込み
+	// reader, err := r.MultipartReader()
+	// fmt.Println(err)
+	//
+	// part, err := reader.NextPart()
+	// fmt.Println(err)
+
+	// ルーティングで設定したurlに含まれる :id とかの部分はc.Params.Route.Getで取得
+	grade := c.Params.Route.Get("grade")
+	id := c.Params.Route.Get("user_id")
+
+	// 現在のディレクトリを取得
 	pwd, _ := os.Getwd()
 
-	err := os.Mkdir("materials", 0777)
+	materialID := models.Material{}
+	DB.Last(&materialID)
+	// s := strconv.Itoa(materialID.Material_id)
+	file_name := c.Params.Files["file"][0].Filename
+
+	fmt.Println(materialID.Material_id)
+
+	//fileを連結 (/Users/yutsukimiyashita/dev/src/SemiRevel/materials/grade/id/)
+	gradeID := filepath.Join(grade, id)
+	materialsPATH := filepath.Join("materials", gradeID)
+	createPATH := filepath.Join(pwd, materialsPATH)
+
+	err := os.MkdirAll(materialsPATH, 0777)
 	fmt.Println(err)
 
-	fmt.Println(pwd)
+	//uploadedfileディレクトリに受け取ったファイル名でファイルを作成
+	uploadedFile, err := os.Create(createPATH + "/" + file_name)
+	fmt.Printf("imgFile => %v\n", uploadedFile)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	//作ったファイルに読み込んだファイルの内容を丸ごとコピー
+	_, err = io.Copy(uploadedFile, file)
+	if err != nil {
+		panic(err)
+	}
+
+	// materialモデルに値を格納
+	material := &models.Material{
+		Material_name: file_name,
+		User_id:       c.Params.Route.Get("user_id"),
+		Year:          year,
+		Month:         intMonth,
+		Day:           date,
+		Material_type: c.Params.Form.Get("material_type"),
+		File_path:     materialsPATH,
+		Comment:       c.Params.Form.Get("comment"),
+	}
+
+	DB.Create(material)
 
 	response := JsonResponse{}
-	response.Response = "post article"
+	response.Response = material
 
 	return c.RenderJSON(response)
 }
