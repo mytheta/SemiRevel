@@ -28,7 +28,7 @@ func (c MaterialApi) GetMaterials() revel.Result {
 	response := JsonResponse{}
 	response.Response = materials
 
-	return c.RenderJSON(response)
+	return c.Render(response)
 }
 
 func (c MaterialApi) GetMaterial() revel.Result {
@@ -48,17 +48,8 @@ func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 
 	//時間を取得
 	time := time.Now()
-
 	year, month, date := time.Date()
-
 	intMonth := int(month)
-	//
-	// //MultipartReaderを用いて受け取ったファイルを読み込み
-	// reader, err := r.MultipartReader()
-	// fmt.Println(err)
-	//
-	// part, err := reader.NextPart()
-	// fmt.Println(err)
 
 	// ルーティングで設定したurlに含まれる :id とかの部分はc.Params.Route.Getで取得
 	grade := c.Params.Route.Get("grade")
@@ -67,10 +58,12 @@ func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 	// 現在のディレクトリを取得
 	pwd, _ := os.Getwd()
 
+	//materialテーブルの最後のautoincrementを取ってくる．
 	materialID := models.Material{}
 	DB.Last(&materialID)
-	// s := strconv.Itoa(materialID.Material_id)
-	file_name := c.Params.Files["file"][0].Filename
+
+	// アップロードしたファイルのファイル名を取得
+	fileName := c.Params.Files["file"][0].Filename
 
 	fmt.Println(materialID.Material_id)
 
@@ -83,7 +76,7 @@ func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 	fmt.Println(err)
 
 	//uploadedfileディレクトリに受け取ったファイル名でファイルを作成
-	uploadedFile, err := os.Create(createPATH + "/" + file_name)
+	uploadedFile, err := os.Create(createPATH + "/" + fileName)
 	fmt.Printf("imgFile => %v\n", uploadedFile)
 	if err != nil {
 		fmt.Println(err)
@@ -97,7 +90,7 @@ func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 
 	// materialモデルに値を格納
 	material := &models.Material{
-		Material_name: file_name,
+		Material_name: fileName,
 		User_id:       c.Params.Route.Get("user_id"),
 		Year:          year,
 		Month:         intMonth,

@@ -1,29 +1,31 @@
 package controllers
 
 import (
-    "github.com/revel/revel"
-    "SemiRevel/app/models"
-    "fmt"
+	"SemiRevel/app/models"
+	"SemiRevel/app/routes"
+	"fmt"
+
+	"github.com/revel/revel"
 )
 
 type Authentication struct {
-    *revel.Controller
+	*revel.Controller
 }
 
 func (c Authentication) Login() revel.Result {
 
-    id := c.Params.Form.Get("id")
-    password := c.Params.Form.Get("password")
+	id := c.Params.Form.Get("id")
+	password := c.Params.Form.Get("password")
 
-    user := models.User{}
-    DB.Where("id = ?", id).First(&user)
+	user := models.User{}
+	DB.Where("id = ?", id).First(&user)
 
-    if password == user.Password {
-        fmt.Println("認証成功")
-    }
+	if password == user.Password {
+		fmt.Println("認証成功")
+	}
 
-       response := JsonResponse{}
-       response.Response = user
+	response := JsonResponse{}
+	response.Response = user
 
-       return c.RenderJSON(response)
+	return c.Redirect(routes.MaterialApi.GetMaterials())
 }
