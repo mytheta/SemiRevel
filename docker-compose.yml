@@ -1,0 +1,5 @@
+semirevel:
+  build: .
+  restart: always
+  ports:
+    - 18080:8080
