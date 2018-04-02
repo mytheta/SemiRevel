@@ -50,7 +50,7 @@ func (c MaterialApi) IndexMaterial() revel.Result {
 	return c.Render(grade, id)
 }
 
-func (c MaterialApi) GetGrade() revel.Result {
+func (c MaterialApi) GradeMaterials() revel.Result {
 
 	id := c.Session["id"]
 	grade := c.Session["grade"]
@@ -67,7 +67,31 @@ func (c MaterialApi) GetGrade() revel.Result {
 		fmt.Println(material.File_path)
 	}
 
+	return c.Render(id, grade)
+}
+
+func (c MaterialApi) MyMaterials() revel.Result {
+
+	id := c.Session["id"]
+	grade := c.Session["grade"]
+	materials := []MaterialJoinsUser{}
+	DB.Where("id = ?", id).Table("materials").Select("materials.*, users.name, users.id").Joins("INNER JOIN users ON users.id = materials.user_id").Order("material_id desc").Limit(100).Scan(&materials)
+	for n, material := range materials {
+		material.File_path = filepath.Join(material.File_path, material.Material_name)
+		materials[n] = material
+		fmt.Println(material.File_path)
+	}
+
+	for _, material := range materials {
+		fmt.Println(material.File_path)
+	}
+
 	return c.Render(materials, id, grade)
+}
+
+func (c MaterialApi) SelectGrade() revel.Result {
+
+	return c.Render()
 }
 
 func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
@@ -131,7 +155,7 @@ func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 	response := JsonResponse{}
 	response.Response = material
 
-	return c.RenderJSON(response)
+	return c.Render()
 }
 
 func (c MaterialApi) ViewMaterial() revel.Result {

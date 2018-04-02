@@ -10,10 +10,11 @@ module:testrunner
 POST    /SemiRevel/login                                     Authentication.Login
 GET     /SemiRevel/                                                    App.Index
 GET     /SemiRevel/materials                                 MaterialApi.GetMaterials
-POST    /SemiRevel/materials/:grade/:user_id                 MaterialApi.PostMaterial
-GET     /SemiRevel/material/regist                           MaterialApi.IndexMaterial
-GET     /SemiRevel/materials/:grade/                         MaterialApi.GetGrade
+POST    /SemiRevel/material/:grade/:user_id                  MaterialApi.PostMaterial
+GET     /SemiRevel/regist                                    MaterialApi.IndexMaterial
 GET     /SemiRevel/materials/grade/                          MaterialApi.SelectGrade
+GET     /SemiRevel/my_materials/                             MaterialApi.MyMaterials
+GET     /SemiRevel/materials/grade/:grade                    MaterialApi.GradeMaterials
 DELETE  /SemiRevel/materials/:grade/:user_id/:material_id    MaterialApi.DeleteMaterial
 
 
