@@ -1,0 +1,24 @@
+{{template "layout.html" .}}
+<body>
+	<form action="/SemiRevel/materials/{{.grade}}/{{.id}}" method="POST" enctype="multipart/form-data">
+    <h1 class="center-block text-info">資料登録</h1>
+    <div class="alt-table-responseve">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>タイトル</th>
+                    <td><input type="text" class="form-control" name="semi_title"></td>
+                </tr>
+                    <th>ファイル</th>
+                    <td><input type="file" class="form-control" name="file"></td>
+                </tr>
+
+						</thead>
+        </table>
+    </div>
+
+    <input type="submit" value="登録" class="btn btn-success">
+    <br>
+    </form>
+    </body>
+ {{template "footer.html" .}}

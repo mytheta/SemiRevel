@@ -1,8 +1,9 @@
 package app
 
 import (
-	"github.com/revel/revel"
 	"SemiRevel/app/controllers"
+
+	"github.com/revel/revel"
 )
 
 var (

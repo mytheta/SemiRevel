@@ -11,9 +11,11 @@ POST    /SemiRevel/login                                     Authentication.Logi
 GET     /SemiRevel/                                                    App.Index
 GET     /SemiRevel/materials                                 MaterialApi.GetMaterials
 POST    /SemiRevel/materials/:grade/:user_id                 MaterialApi.PostMaterial
-GET     /SemiRevel/materials/:grade                         MaterialApi.GetMaterial
-GET     /SemiRevel/materials/:grade/:user_id/:materials_id   MaterialApi.ViewMaterial
+GET     /SemiRevel/material/regist                           MaterialApi.IndexMaterial
+GET     /SemiRevel/materials/:grade/                         MaterialApi.GetGrade
+GET     /SemiRevel/materials/grade/                          MaterialApi.SelectGrade
 DELETE  /SemiRevel/materials/:grade/:user_id/:material_id    MaterialApi.DeleteMaterial
+
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

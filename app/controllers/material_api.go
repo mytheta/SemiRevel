@@ -4,6 +4,7 @@ import (
 	"SemiRevel/app/models"
 	"fmt"
 	"io"
+	"myapp/app/routes"
 	"os"
 	"path/filepath"
 	"time"
@@ -22,26 +23,51 @@ type MaterialJoinsUser struct {
 
 func (c MaterialApi) GetMaterials() revel.Result {
 
+	id := c.Session["id"]
+	grade := c.Session["grade"]
+
 	materials := []MaterialJoinsUser{}
-	DB.Table("materials").Select("materials.*, users.name, users.id").Joins("INNER JOIN users ON users.id = materials.user_id").Order("id desc").Limit(100).Scan(&materials)
+	DB.Table("materials").Select("materials.*, users.name, users.id").Joins("INNER JOIN users ON users.id = materials.user_id").Order("material_id desc").Limit(100).Scan(&materials)
+	for n, material := range materials {
+		material.File_path = filepath.Join(material.File_path, material.Material_name)
+		materials[n] = material
+		fmt.Println(material.File_path)
+	}
 
-	response := JsonResponse{}
-	response.Response = materials
+	for _, material := range materials {
+		fmt.Println(material.File_path)
+	}
 
-	return c.Render(response)
+	return c.Render(materials, id, grade)
 }
 
-func (c MaterialApi) GetMaterial() revel.Result {
+func (c MaterialApi) IndexMaterial() revel.Result {
+	id := c.Session["id"]
+	grade := c.Session["grade"]
+	fmt.Println("aaaaaaaa")
+	fmt.Println(id)
 
-	grade := c.Params.Route.Get("grade")
+	return c.Render(grade, id)
+}
 
+func (c MaterialApi) GetGrade() revel.Result {
+
+	id := c.Session["id"]
+	grade := c.Session["grade"]
+	selectgrade := c.Params.Route.Get("grade")
 	materials := []MaterialJoinsUser{}
-	DB.Table("materials").Select("materials.*, users.name, users.id").Joins("INNER JOIN users ON users.id = materials.user_id").Where("users.grade = ?", grade).Order("id desc").Limit(100).Scan(&materials)
+	DB.Where("grade = ?", selectgrade).Table("materials").Select("materials.*, users.name, users.id").Joins("INNER JOIN users ON users.id = materials.user_id").Order("material_id desc").Limit(100).Scan(&materials)
+	for n, material := range materials {
+		material.File_path = filepath.Join(material.File_path, material.Material_name)
+		materials[n] = material
+		fmt.Println(material.File_path)
+	}
 
-	response := JsonResponse{}
-	response.Response = materials
+	for _, material := range materials {
+		fmt.Println(material.File_path)
+	}
 
-	return c.RenderJSON(response)
+	return c.Render(materials, id, grade)
 }
 
 func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
@@ -122,4 +148,19 @@ func (c MaterialApi) DeleteMaterial() revel.Result {
 	response.Response = "delete article"
 
 	return c.RenderJSON(response)
+}
+
+func checkUser(c *revel.Controller) revel.Result {
+	fmt.Println("checkuser")
+	if id, ok := c.Session["id"]; ok != true {
+		fmt.Println(id)
+		c.Flash.Error("Please log in first")
+		return c.Redirect(routes.App.Index())
+	}
+
+	return nil
+}
+
+func init() {
+	// revel.InterceptFunc(checkUser, revel.BEFORE, &MaterialApi{})
 }

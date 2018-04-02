@@ -21,6 +21,8 @@ func (c Authentication) Login() revel.Result {
 	DB.Where("id = ?", id).First(&user)
 
 	if password == user.Password {
+		c.Session["id"] = id
+		c.Session["grade"] = user.Grade
 		fmt.Println("認証成功")
 	}
 
