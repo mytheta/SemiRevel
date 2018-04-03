@@ -15,6 +15,7 @@ GET     /SemiRevel/regist                                    MaterialApi.IndexMa
 GET     /SemiRevel/materials/grade/                          MaterialApi.SelectGrade
 GET     /SemiRevel/my_materials/                             MaterialApi.MyMaterials
 GET     /SemiRevel/materials/grade/:grade                    MaterialApi.GradeMaterials
+GET     /SemiRevel/materials/:grade/:user_id/:file_path      MaterialApi.File
 DELETE  /SemiRevel/materials/:grade/:user_id/:material_id    MaterialApi.DeleteMaterial
 
 

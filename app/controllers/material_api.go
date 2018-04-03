@@ -2,14 +2,12 @@ package controllers
 
 import (
 	"SemiRevel/app/models"
-	"bytes"
 	"fmt"
 	"io"
-	"log"
 	"myapp/app/routes"
-	"net/smtp"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/revel/revel"
@@ -32,7 +30,7 @@ func (c MaterialApi) GetMaterials() revel.Result {
 	materials := []MaterialJoinsUser{}
 	DB.Table("materials").Select("materials.*, users.name, users.id").Joins("INNER JOIN users ON users.id = materials.user_id").Order("material_id desc").Limit(100).Scan(&materials)
 	for n, material := range materials {
-		material.File_path = filepath.Join(material.File_path, material.Material_name)
+		material.File_path = filepath.Join(material.File_path, material.File_name)
 		materials[n] = material
 		fmt.Println(material.File_path)
 	}
@@ -61,7 +59,7 @@ func (c MaterialApi) GradeMaterials() revel.Result {
 	materials := []MaterialJoinsUser{}
 	DB.Where("grade = ?", selectgrade).Table("materials").Select("materials.*, users.name, users.id").Joins("INNER JOIN users ON users.id = materials.user_id").Order("material_id desc").Limit(100).Scan(&materials)
 	for n, material := range materials {
-		material.File_path = filepath.Join(material.File_path, material.Material_name)
+		material.File_path = filepath.Join(material.File_path, material.File_name)
 		materials[n] = material
 		fmt.Println(material.File_path)
 	}
@@ -80,7 +78,7 @@ func (c MaterialApi) MyMaterials() revel.Result {
 	materials := []MaterialJoinsUser{}
 	DB.Where("id = ?", id).Table("materials").Select("materials.*, users.name, users.id").Joins("INNER JOIN users ON users.id = materials.user_id").Order("material_id desc").Limit(100).Scan(&materials)
 	for n, material := range materials {
-		material.File_path = filepath.Join(material.File_path, material.Material_name)
+		material.File_path = filepath.Join(material.File_path, material.File_name)
 		materials[n] = material
 		fmt.Println(material.File_path)
 	}
@@ -108,6 +106,9 @@ func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 	grade := c.Params.Route.Get("grade")
 	id := c.Params.Route.Get("user_id")
 
+	materialName := c.Params.Form.Get("material_name")
+	comment := c.Params.Form.Get("comment")
+
 	// 現在のディレクトリを取得
 	pwd, _ := os.Getwd()
 
@@ -117,6 +118,18 @@ func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 
 	// アップロードしたファイルのファイル名を取得
 	fileName := c.Params.Files["file"][0].Filename
+
+	//アップロードしたファイルの取得
+	extension := strings.LastIndex(fileName, ".")
+
+	//ファイル名をランダムの数値に変換
+	// var randomName int
+	// randomName, _ = strconv.Atoi(random())
+	randomName := random()
+	randomName += fileName[extension:]
+
+	//stringに変換
+	// randomStringName := strconv.Itoa(randomName)
 
 	fmt.Println(materialID.Material_id)
 
@@ -129,7 +142,7 @@ func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 	fmt.Println(err)
 
 	//uploadedfileディレクトリに受け取ったファイル名でファイルを作成
-	uploadedFile, err := os.Create(createPATH + "/" + fileName)
+	uploadedFile, err := os.Create(createPATH + "/" + randomName)
 	fmt.Printf("imgFile => %v\n", uploadedFile)
 	if err != nil {
 		fmt.Println(err)
@@ -143,14 +156,14 @@ func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 
 	// materialモデルに値を格納
 	material := &models.Material{
-		Material_name: fileName,
+		Material_name: materialName,
+		File_name:     randomName,
 		User_id:       c.Params.Route.Get("user_id"),
 		Year:          year,
 		Month:         intMonth,
 		Day:           date,
-		Material_type: c.Params.Form.Get("material_type"),
 		File_path:     materialsPATH,
-		Comment:       c.Params.Form.Get("comment"),
+		Comment:       comment,
 	}
 
 	DB.Create(material)
@@ -160,34 +173,48 @@ func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 
 	//メール機能
 	// Connect to the remote SMTP server.
-	d, err := smtp.Dial("sapphire.u-gakugei.ac.jp:25")
-	if err != nil {
-		log.Fatal(err)
-	}
+	// d, err := smtp.Dial("sapphire.u-gakugei.ac.jp:25")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 	// Set the sender and recipient.
-	d.Mail("SemiRevel@sapphire.u-gakugei.ac.jp") // メールの送り主を指定
-	d.Rcpt("hazelab@sapphire.u-gakugei.ac.jp")   // 受信者を指定
+	// d.Mail("SemiRevel@sapphire.u-gakugei.ac.jp") // メールの送り主を指定
+	// d.Rcpt("hazelab@sapphire.u-gakugei.ac.jp")   // 受信者を指定
+	//
+	// // Send the email body.
+	// wc, err := d.Data()
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// defer wc.Close()
+	// //ToにするかCcにするかBccにするかはDATAメッセージ次第
+	// buf := bytes.NewBufferString("To:hazelab@sapphire.u-gakugei.ac.jp")
+	// buf.WriteString("\r\n") // DATA メッセージはCRLFのみ
+	// buf.WriteString("\r\n")
+	// buf.WriteString("ゼミ資料管理システム") //件名
+	// buf.WriteString("\r\n")
+	// buf.WriteString("新しい資料が登録されました")
+	// if _, err = buf.WriteTo(wc); err != nil {
+	// 	log.Fatal(err)
+	// }
 
-	// Send the email body.
-	wc, err := d.Data()
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer wc.Close()
-	//ToにするかCcにするかBccにするかはDATAメッセージ次第
-	buf := bytes.NewBufferString("To:hazelab@sapphire.u-gakugei.ac.jp")
-	buf.WriteString("\r\n") // DATA メッセージはCRLFのみ
-	buf.WriteString("\r\n")
-	buf.WriteString("ゼミ資料管理システム") //件名
-	buf.WriteString("\r\n")
-	buf.WriteString("新しい資料が登録されました")
-	if _, err = buf.WriteTo(wc); err != nil {
-		log.Fatal(err)
-	}
-
-	d.Quit() //メールセッションの終了
+	// d.Quit() //メールセッションの終了
 
 	return c.Render()
+}
+
+func (c MaterialApi) File() revel.Result {
+	pwd, _ := os.Getwd()
+	path := filepath.Join("/materials/", c.Params.Route.Get("grade"))
+	path = filepath.Join(path, c.Params.Route.Get("user_id"))
+	path = filepath.Join(path, c.Params.Route.Get("file_path"))
+	path = filepath.Join(pwd, path)
+	f, err := os.Open(path)
+	if err != nil {
+		fmt.Println("エラーだよ")
+	}
+	fmt.Println(path)
+	return c.RenderFile(f, revel.Inline)
 }
 
 func (c MaterialApi) ViewMaterial() revel.Result {
