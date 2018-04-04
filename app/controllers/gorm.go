@@ -14,7 +14,7 @@ func InitDB() {
 	// gormでMySQL接続
 	// 失敗したらerrに格納される
 	// Openの第二引数は {username}:{password}@/{dbname}?charset=utf8&parseTime=True&loc=Local
-	db, err := gorm.Open("mysql", "root:@/semirevel?charset=utf8&parseTime=True&loc=Local")
+	db, err := gorm.Open("mysql", "root:YUtsuki-0321@/semirevel?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		fmt.Println(err)
 	}

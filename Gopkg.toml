@@ -24,6 +24,13 @@
 #   go-tests = true
 #   unused-packages = true
 
+ignored = [
+  "github.com/revel/cron",
+  "github.com/revel/modules",
+  "github.com/revel/modules/jobs/app/jobs",
+  "github.com/revel/revel",
+  "github.com/revel/revel/testing",
+]
 
 [[constraint]]
   name = "github.com/jinzhu/gorm"
@@ -33,9 +40,9 @@
 #   name = "github.com/revel/modules"
 #   version = "0.19.0"
 
-[[constraint]]
-  name = "github.com/revel/revel"
-  version = "0.19.1"
+# [[constraint]]
+#   name = "github.com/revel/revel"
+#   version = "0.19.1"
 
 [prune]
   go-tests = true
