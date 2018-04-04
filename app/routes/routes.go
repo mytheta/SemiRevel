@@ -4,37 +4,6 @@ package routes
 import "github.com/revel/revel"
 
 
-type tApp struct {}
-var App tApp
-
-
-func (_ tApp) Index(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("App.Index", args).URL
-}
-
-
-type tAuthentication struct {}
-var Authentication tAuthentication
-
-
-func (_ tAuthentication) Login(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("Authentication.Login", args).URL
-}
-
-func (_ tAuthentication) Logout(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("Authentication.Logout", args).URL
-}
-
-
 type tMaterialApi struct {}
 var MaterialApi tMaterialApi
 
@@ -102,6 +71,37 @@ func (_ tMaterialApi) DeleteMaterial(
 	args := make(map[string]string)
 	
 	return revel.MainRouter.Reverse("MaterialApi.DeleteMaterial", args).URL
+}
+
+
+type tApp struct {}
+var App tApp
+
+
+func (_ tApp) Index(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("App.Index", args).URL
+}
+
+
+type tAuthentication struct {}
+var Authentication tAuthentication
+
+
+func (_ tAuthentication) Login(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Authentication.Login", args).URL
+}
+
+func (_ tAuthentication) Logout(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Authentication.Logout", args).URL
 }
 
 
