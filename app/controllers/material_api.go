@@ -2,9 +2,9 @@ package controllers
 
 import (
 	"SemiRevel/app/models"
+	"SemiRevel/app/routes"
 	"fmt"
 	"io"
-	"myapp/app/routes"
 	"os"
 	"path/filepath"
 	"strings"
