@@ -17,4 +17,4 @@ WORKDIR ${SEMIREVELDIR}
 RUN glide install
 RUN go build
 
-CMD ${SEMIREVELDIR}/SemiGo
+CMD ${SEMIREVELDIR}/SemiRevel

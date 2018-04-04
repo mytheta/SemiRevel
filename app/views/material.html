@@ -1,0 +1,25 @@
+<div class="alt-table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+          <th>名前</th>
+          <th>年</th>
+          <th>月</th>
+          <th>資料</th>
+          <th>コメント</th>
+      </tr>
+    </thead>
+    <tbody>
+        {{range .materials}}
+          <tr>
+          <td>{{.Name}}</td>
+          <td>{{.Year}}</td>
+              <td>{{.Month}}</td>
+              <td><a href={{.File_path}} download>{{.Material_name}}</td>
+                <td>{{.Comment}}</td>
+          </tr>
+          {{end}}
+
+    </tbody>
+  </table>
+</div>

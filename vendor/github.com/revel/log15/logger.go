@@ -2,9 +2,12 @@ package log15
 
 import (
 	"fmt"
-	"runtime"
 	"time"
+
+	"gopkg.in/stack.v0"
 )
+
+const defaultStackDepth = 2
 
 const timeKey = "t"
 const lvlKey = "lvl"
@@ -64,7 +67,7 @@ type Record struct {
 	Lvl      Lvl
 	Msg      string
 	Ctx      []interface{}
-	CallPC   [1]uintptr
+	Call     stack.Call
 	KeyNames RecordKeyNames
 }
 
@@ -79,6 +82,9 @@ type Logger interface {
 	// New returns a new Logger that has this logger's context plus the given context
 	New(ctx ...interface{}) Logger
 
+	// GetHandler gets the handler associated with the logger.
+	GetHandler() Handler
+
 	// SetHandler updates the logger to write records to the specified handler.
 	SetHandler(h Handler)
 
@@ -88,31 +94,42 @@ type Logger interface {
 	Warn(msg string, ctx ...interface{})
 	Error(msg string, ctx ...interface{})
 	Crit(msg string, ctx ...interface{})
+	SetStackDepth(depth int) Logger
 }
 
 type logger struct {
 	ctx []interface{}
 	h   *swapHandler
+
+	stackDepth int
 }
 
 func (l *logger) write(msg string, lvl Lvl, ctx []interface{}) {
-	r := Record{
+	l.h.Log(&Record{
 		Time: time.Now(),
 		Lvl:  lvl,
 		Msg:  msg,
 		Ctx:  newContext(l.ctx, ctx),
+		Call: stack.Caller(l.stackDepth),
 		KeyNames: RecordKeyNames{
 			Time: timeKey,
 			Msg:  msgKey,
 			Lvl:  lvlKey,
 		},
-	}
-	runtime.Callers(3, r.CallPC[:])
-	l.h.Log(&r)
+	})
+}
+
+// SetStackDepth resets the stack depth.
+//
+// The argument, depth, is the depth from the app call to logger, which doesn't
+// contain the inner stack depth of logger. The default is 0.
+func (l *logger) SetStackDepth(depth int) Logger {
+	l.stackDepth = depth + defaultStackDepth
+	return l
 }
 
 func (l *logger) New(ctx ...interface{}) Logger {
-	child := &logger{newContext(l.ctx, ctx), new(swapHandler)}
+	child := &logger{newContext(l.ctx, ctx), new(swapHandler), l.stackDepth}
 	child.SetHandler(l.h)
 	return child
 }
@@ -143,6 +160,10 @@ func (l *logger) Error(msg string, ctx ...interface{}) {
 
 func (l *logger) Crit(msg string, ctx ...interface{}) {
 	l.write(msg, LvlCrit, ctx)
+}
+
+func (l *logger) GetHandler() Handler {
+	return l.h.Get()
 }
 
 func (l *logger) SetHandler(h Handler) {

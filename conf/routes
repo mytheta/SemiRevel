@@ -8,6 +8,7 @@ module:testrunner
 
 
 POST    /SemiRevel/login                                     Authentication.Login
+GET     /SemiRevel/logout                                    Authentication.Logout
 GET     /SemiRevel/                                                    App.Index
 GET     /SemiRevel/materials                                 MaterialApi.GetMaterials
 POST    /SemiRevel/material/:grade/:user_id                  MaterialApi.PostMaterial

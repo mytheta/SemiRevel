@@ -31,3 +31,11 @@ func (c Authentication) Login() revel.Result {
 
 	return c.Redirect(routes.MaterialApi.GetMaterials())
 }
+
+func (c Authentication) Logout() revel.Result {
+
+	delete(c.Session, "id")    // Removed item from session
+	delete(c.Session, "grade") // Removed item from session
+
+	return c.Redirect(routes.App.Index())
+}

@@ -40,3 +40,10 @@
 [prune]
   go-tests = true
   unused-packages = true
+
+[[override]]
+  branch = "master"
+  name = "github.com/xeonx/timeago"
+[[override]]
+  branch = "master"
+  name = "github.com/revel/log15"

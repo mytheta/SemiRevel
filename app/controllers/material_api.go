@@ -52,7 +52,7 @@ func (c MaterialApi) IndexMaterial() revel.Result {
 }
 
 func (c MaterialApi) GradeMaterials() revel.Result {
-
+	fmt.Println(c.Params.Route.Get("grade"))
 	id := c.Session["id"]
 	grade := c.Session["grade"]
 	selectgrade := c.Params.Route.Get("grade")
@@ -68,7 +68,7 @@ func (c MaterialApi) GradeMaterials() revel.Result {
 		fmt.Println(material.File_path)
 	}
 
-	return c.Render(id, grade)
+	return c.Render(materials, id, grade)
 }
 
 func (c MaterialApi) MyMaterials() revel.Result {
@@ -91,8 +91,8 @@ func (c MaterialApi) MyMaterials() revel.Result {
 }
 
 func (c MaterialApi) SelectGrade() revel.Result {
-
-	return c.Render()
+	id := c.Session["id"]
+	return c.Render(id)
 }
 
 func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
@@ -245,5 +245,5 @@ func checkUser(c *revel.Controller) revel.Result {
 }
 
 func init() {
-	// revel.InterceptFunc(checkUser, revel.BEFORE, &MaterialApi{})
+	revel.InterceptFunc(checkUser, revel.BEFORE, &MaterialApi{})
 }

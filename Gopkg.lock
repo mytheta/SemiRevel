@@ -8,6 +8,12 @@
   version = "v1.3"
 
 [[projects]]
+  name = "github.com/inconshreveable/log15"
+  packages = ["term"]
+  revision = "0decfc6c20d9ca0ad143b0e89dcaa20f810b4fb3"
+  version = "v2.13"
+
+[[projects]]
   name = "github.com/jinzhu/gorm"
   packages = [
     ".",
@@ -63,10 +69,10 @@
   version = "v0.19.0"
 
 [[projects]]
+  branch = "master"
   name = "github.com/revel/log15"
   packages = ["."]
-  revision = "b105bd37f74e5d9dc7b6ad7806715c7a2b83fd3f"
-  version = "v2.11"
+  revision = "793412a67da6f8d15fede4c38f5c66272478cb8a"
 
 [[projects]]
   name = "github.com/revel/modules"
@@ -95,10 +101,10 @@
   version = "v0.19.1"
 
 [[projects]]
+  branch = "master"
   name = "github.com/xeonx/timeago"
   packages = ["."]
-  revision = "49df971d6c5d5b073f921e8c580fbb6a0bb629c1"
-  version = "v1.0.0-rc2"
+  revision = "714e6695c468c22fb6431a914d8c5f9d19fa2367"
 
 [[projects]]
   branch = "master"
@@ -119,15 +125,6 @@
   version = "v1.4.7"
 
 [[projects]]
-  name = "gopkg.in/inconshreveable/log15.v2"
-  packages = [
-    "stack",
-    "term"
-  ]
-  revision = "b105bd37f74e5d9dc7b6ad7806715c7a2b83fd3f"
-  version = "v2.11"
-
-[[projects]]
   name = "gopkg.in/natefinch/lumberjack.v2"
   packages = ["."]
   revision = "a96e63847dc3c67d17befa69c303767e2f84e54f"
@@ -142,6 +139,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "e6e9ee0b16b7913689e94181a2c0ccab85a8ac63ceeaac08a66757c3916e4554"
+  inputs-digest = "113562ceddd2172ba6a58fa9e608cb70ac016669caaa02807d56915cf64cb2e5"
   solver-name = "gps-cdcl"
   solver-version = 1

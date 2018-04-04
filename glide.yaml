@@ -1,7 +1,0 @@
-package: SemiRevel
-import:
-- package: github.com/goadesign/goa
-  version: ^1.3.0
-  subpackages:
-  - goagen
-  - '...'

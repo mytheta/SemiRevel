@@ -3,8 +3,8 @@ package log15
 import (
 	"os"
 
+	"github.com/inconshreveable/log15/term"
 	"github.com/mattn/go-colorable"
-	"gopkg.in/inconshreveable/log15.v2/term"
 )
 
 var (
@@ -22,7 +22,7 @@ func init() {
 		StderrHandler = StreamHandler(colorable.NewColorableStderr(), TerminalFormat())
 	}
 
-	root = &logger{[]interface{}{}, new(swapHandler)}
+	root = &logger{[]interface{}{}, new(swapHandler), defaultStackDepth}
 	root.SetHandler(StdoutHandler)
 }
 

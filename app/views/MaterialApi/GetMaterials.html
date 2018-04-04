@@ -4,50 +4,7 @@
    	 		<h1 class="text-center">SemiRevel</h1>
    	 	</div>
 
-
-
-      <div class="alt-table-responsive">
-			  <table class="table">
-			    <thead>
-			      <tr>
-			          <th>名前</th>
-			          <th>月</th>
-			          <th>資料</th>
-			      </tr>
-			    </thead>
-			    <tbody>
-			    	  {{range .materials}}
-			    			<tr>
-			    			<td>{{.Name}}</td>
-				            <td>{{.Month}}</td>
-				            <td><a href={{.File_path}} download>{{.Material_name}}</td>
-			    			</tr>
-			    		  {{end}}
-
-			    </tbody>
-			  </table>
-			</div>
-      <!-- <div class="alt-table-responseve">
-			<table class="table">
-				<thead>
-					<tr>
-						<th>名前</th>
-						<td>{{.Name}}</td>
-					</tr>
-					<tr>
-						<th>月</th>
-						<td>{{.Month}}</td>
-					</tr>
-					<tr>
-						<th>資料</th>
-						<td><a download={{.Material_name}} href={.File_path}}></td>
-						</form>
-					</tr>
-				</thead>
-			</table>
-		</div> -->
-        <!-- <p>{{.Material_name}}<b>{{.Material_id}}</b></p>
-        <a download={{.Material_name}} href={.File_path}}> -->
-
+    <h1 class="center-block text-info">資料閲覧(すべて)</h1>
+{{template "material.html" .}}
 
  {{template "footer.html" .}}
