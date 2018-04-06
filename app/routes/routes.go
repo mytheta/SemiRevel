@@ -8,11 +8,11 @@ type tMaterialApi struct {}
 var MaterialApi tMaterialApi
 
 
-func (_ tMaterialApi) GetMaterials(
+func (_ tMaterialApi) Home(
 		) string {
 	args := make(map[string]string)
 	
-	return revel.MainRouter.Reverse("MaterialApi.GetMaterials", args).URL
+	return revel.MainRouter.Reverse("MaterialApi.Home", args).URL
 }
 
 func (_ tMaterialApi) IndexMaterial(
@@ -74,6 +74,32 @@ func (_ tMaterialApi) DeleteMaterial(
 }
 
 
+type tPassword struct {}
+var Password tPassword
+
+
+func (_ tPassword) Index(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Password.Index", args).URL
+}
+
+func (_ tPassword) Input(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Password.Input", args).URL
+}
+
+func (_ tPassword) Password(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Password.Password", args).URL
+}
+
+
 type tApp struct {}
 var App tApp
 
@@ -83,6 +109,13 @@ func (_ tApp) Index(
 	args := make(map[string]string)
 	
 	return revel.MainRouter.Reverse("App.Index", args).URL
+}
+
+func (_ tApp) Home(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("App.Home", args).URL
 }
 
 

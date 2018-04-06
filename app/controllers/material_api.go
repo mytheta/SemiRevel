@@ -22,31 +22,17 @@ type MaterialJoinsUser struct {
 	models.User
 }
 
-func (c MaterialApi) GetMaterials() revel.Result {
+func (c MaterialApi) Home() revel.Result {
 
 	id := c.Session["id"]
 	grade := c.Session["grade"]
 
-	materials := []MaterialJoinsUser{}
-	DB.Table("materials").Select("materials.*, users.name, users.id").Joins("INNER JOIN users ON users.id = materials.user_id").Order("material_id desc").Limit(100).Scan(&materials)
-	for n, material := range materials {
-		material.File_path = filepath.Join(material.File_path, material.File_name)
-		materials[n] = material
-		fmt.Println(material.File_path)
-	}
-
-	for _, material := range materials {
-		fmt.Println(material.File_path)
-	}
-
-	return c.Render(materials, id, grade)
+	return c.Render(id, grade)
 }
 
 func (c MaterialApi) IndexMaterial() revel.Result {
 	id := c.Session["id"]
 	grade := c.Session["grade"]
-	fmt.Println("aaaaaaaa")
-	fmt.Println(id)
 
 	return c.Render(grade, id)
 }
@@ -113,8 +99,8 @@ func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 	pwd, _ := os.Getwd()
 
 	//materialテーブルの最後のautoincrementを取ってくる．
-	materialID := models.Material{}
-	DB.Last(&materialID)
+	// materialID := models.Material{}
+	// DB.Last(&materialID)
 
 	// アップロードしたファイルのファイル名を取得
 	fileName := c.Params.Files["file"][0].Filename
@@ -130,8 +116,6 @@ func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 
 	//stringに変換
 	// randomStringName := strconv.Itoa(randomName)
-
-	fmt.Println(materialID.Material_id)
 
 	//fileを連結 (/Users/yutsukimiyashita/dev/src/SemiRevel/materials/grade/id/)
 	gradeID := filepath.Join(grade, id)
@@ -227,13 +211,13 @@ func (c MaterialApi) ViewMaterial() revel.Result {
 
 func (c MaterialApi) DeleteMaterial() revel.Result {
 
-	response := JsonResponse{}
-	response.Response = "delete article"
+	id := c.Session["id"]
+	grade := c.Session["grade"]
 
-	return c.RenderJSON(response)
+	return c.Render(id, grade)
 }
 
-func checkUser(c *revel.Controller) revel.Result {
+func CheckUser(c *revel.Controller) revel.Result {
 	fmt.Println("checkuser")
 	if id, ok := c.Session["id"]; ok != true {
 		fmt.Println(id)
@@ -245,5 +229,5 @@ func checkUser(c *revel.Controller) revel.Result {
 }
 
 func init() {
-	revel.InterceptFunc(checkUser, revel.BEFORE, &MaterialApi{})
+	revel.InterceptFunc(CheckUser, revel.BEFORE, &MaterialApi{})
 }

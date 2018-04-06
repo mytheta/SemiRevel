@@ -16,6 +16,8 @@
 
         	<form class="form-signin" action="/SemiRevel/login" method="POST">
 	        	<h2 class="form-signin-heading text-center">Please sign in</h2>
+						{{.flash.success}}
+						{{.flash.error}}
 	       		<input type="text" name="id" class="form-control" placeholder="User Id" maxlength="12" required autofocus>
 	      	    <input type="password" name="password" class="form-control" placeholder="Password" maxlength="12" required>
 	     	    <button class="btn btn-lg btn-primary btn-block" type="submit" name="login" value="Login">Sign in</button>

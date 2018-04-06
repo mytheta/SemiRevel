@@ -1,0 +1,35 @@
+{{template "layout.html" .}}
+<div class="jumbotron text-center" style="background-color:#FFE;coror:#000">
+			<h1 class="text-center">SemiRevel</h1>
+		</div>
+
+
+<body>
+	<form action="/SemiRevel/password/change" method="POST" enctype="multipart/form-data">
+    <h1 class="center-block text-info">パスワード変更</h1>
+    <div class="alt-table-responseve">
+        <table class="table">
+					{{.flash.error}}
+            <thead>
+                <tr>
+                    <th>現在のパスワードを入力してください．</th>
+                    <td><input type="text" class="form-control" name="password"></td>
+                </tr>
+                    <th>新しいパスワードを入力してください．</th>
+                    <td><input type="text" class="form-control" name="new_password1"></td>
+                </tr>
+							</tr>
+									<th>もう一度新しいパスワードを入力してください</th>
+									<td><input type="text" class="form-control" name="new_password2"></td>
+							</tr>
+
+						</thead>
+        </table>
+    </div>
+
+    <input type="submit" value="登録" class="btn btn-success">
+    <br>
+    </form>
+    </body>
+
+ {{template "footer.html" .}}

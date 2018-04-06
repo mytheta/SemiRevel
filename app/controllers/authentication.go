@@ -13,10 +13,8 @@ type Authentication struct {
 }
 
 func (c Authentication) Login() revel.Result {
-
 	id := c.Params.Form.Get("id")
-	password := c.Params.Form.Get("password")
-
+	password := toHash(c.Params.Form.Get("password"))
 	user := models.User{}
 	DB.Where("id = ?", id).First(&user)
 
@@ -24,18 +22,17 @@ func (c Authentication) Login() revel.Result {
 		c.Session["id"] = id
 		c.Session["grade"] = user.Grade
 		fmt.Println("認証成功")
+	} else {
+		c.Flash.Error("パスワードが違います．")
+		return c.Redirect(routes.App.Index())
 	}
-
-	response := JsonResponse{}
-	response.Response = user
-
-	return c.Redirect(routes.MaterialApi.GetMaterials())
+	return c.Redirect(routes.MaterialApi.Home())
 }
 
 func (c Authentication) Logout() revel.Result {
 
 	delete(c.Session, "id")    // Removed item from session
 	delete(c.Session, "grade") // Removed item from session
-
+	c.Flash.Success("logoutしました")
 	return c.Redirect(routes.App.Index())
 }
