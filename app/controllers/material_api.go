@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"SemiRevel/app/models"
+	"SemiRevel/app/routes"
 	"bytes"
 	"fmt"
 	"io"
@@ -13,7 +14,6 @@ import (
 	"time"
 
 	"github.com/revel/revel"
-	"github.com/shiro16/golang-bbs/app/routes"
 )
 
 type MaterialApi struct {
