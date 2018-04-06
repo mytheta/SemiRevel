@@ -44,6 +44,8 @@ func (c Password) Password() revel.Result {
 		fmt.Println("新しいpasswordに間違いがあります．")
 		return c.Redirect(Password.Input)
 	} else {
+
+		newpassword1 = toHash(c.Params.Form.Get(newpassword1))
 		DB.Model(&user).Update("password", newpassword1).Where("id = ?", id)
 		c.Flash.Success("passwordが変更できました．")
 	}
