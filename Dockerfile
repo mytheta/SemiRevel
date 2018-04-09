@@ -3,8 +3,6 @@ FROM golang:latest
 LABEL maintainer = "Yutsuki Miyashita <j148015n@st.u-gakugei.ac.jp>"
 LABEL description = "ゼミ資料管理のAPI for Hazelab"
 
-RUN curl https://glide.sh/get | sh
-
 ENV GOPATH /go
 RUN mkdir -p ${GOPATH}/src
 
@@ -14,7 +12,15 @@ RUN mkdir ${SEMIREVELDIR}
 
 COPY . ${SEMIREVELDIR}
 WORKDIR ${SEMIREVELDIR}
-RUN glide install
-RUN go build
+# Go dep!
+RUN go get -u github.com/golang/dep/...
+RUN dep ensure
 
+# Revel Run
+RUN # Go dep!
+RUN go get github.com/revel/revel
+RUN go get github.com/revel/cmd/revel
 CMD ${SEMIREVELDIR}/SemiRevel
+
+
+EXPOSE 9000

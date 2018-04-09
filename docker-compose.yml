@@ -1,5 +1,20 @@
-semirevel:
-  build: .
-  restart: always
-  ports:
-    - 18080:8080
+version: '2' #docker-composeのバージョンを指定
+services:
+    db:
+        image: mysql:5.7 #mysql5.7が準備されているimageを指定
+        ports:
+            - "3306:3306" # <-これがないと外からアクセス出来ない
+        expose:
+            - 3306
+        environment:
+            - MYSQL_ROOT_PASSWORD= #rootのパスワード
+            - MYSQL_DATABASE=semirevel #revelデータベースの作成
+            - MYSQL_USER=root #revelユーザの作成
+            - MYSQL_PASSWORD= #revelユーザのパスワード
+    web:
+        build: . #Dockerfileをビルド
+        command: revel run SemiRevel #docker-compose up の際にアプリケーション実行
+        ports:
+            - 9000:9000 #ポート9000番の開放
+        depends_on:
+            - db #dbとつなげる

@@ -4,6 +4,32 @@ package routes
 import "github.com/revel/revel"
 
 
+type tPassword struct {}
+var Password tPassword
+
+
+func (_ tPassword) Index(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Password.Index", args).URL
+}
+
+func (_ tPassword) Input(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Password.Input", args).URL
+}
+
+func (_ tPassword) Password(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Password.Password", args).URL
+}
+
+
 type tApp struct {}
 var App tApp
 
@@ -109,32 +135,6 @@ func (_ tMaterialApi) DeleteMaterial(
 	args := make(map[string]string)
 	
 	return revel.MainRouter.Reverse("MaterialApi.DeleteMaterial", args).URL
-}
-
-
-type tPassword struct {}
-var Password tPassword
-
-
-func (_ tPassword) Index(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("Password.Index", args).URL
-}
-
-func (_ tPassword) Input(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("Password.Input", args).URL
-}
-
-func (_ tPassword) Password(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("Password.Password", args).URL
 }
 
 
