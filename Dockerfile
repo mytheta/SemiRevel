@@ -17,10 +17,7 @@ RUN go get -u github.com/golang/dep/...
 RUN dep ensure
 
 # Revel Run
-RUN # Go dep!
 RUN go get github.com/revel/revel
 RUN go get github.com/revel/cmd/revel
+RUN revel run
 CMD ${SEMIREVELDIR}/SemiRevel
-
-
-EXPOSE 9000
