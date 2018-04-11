@@ -30,7 +30,7 @@ func (c Password) Password() revel.Result {
 	user := models.User{}
 	DB.Where("id = ?", id).First(&user)
 
-	password := c.Params.Form.Get("password")
+	password := toHash(c.Params.Form.Get("password"))
 	newpassword1 := c.Params.Form.Get("new_password1")
 	newpassword2 := c.Params.Form.Get("new_password2")
 

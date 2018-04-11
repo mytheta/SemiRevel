@@ -23,6 +23,16 @@
   revision = "04140366298a54a039076d798123ffa108fff46c"
 
 [[projects]]
+  name = "github.com/revel/modules"
+  packages = [
+    "static/app/controllers",
+    "testrunner/app",
+    "testrunner/app/controllers"
+  ]
+  revision = "f97a4d0320f4ee755526333a0286f787a5bf6d8b"
+  version = "v0.19.0"
+
+[[projects]]
   name = "github.com/revel/revel"
   packages = ["testing"]
   revision = "248166bf840eab87a88d1c18309f8e174e8327ff"
@@ -37,6 +47,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "7e656337d0dd8d2d45d2f5eb8d72d8a907e7be1e5de56342b8c19f6e6eb1660e"
+  inputs-digest = "47ad26e65a21fee4f8c56fd18fd6875c9323b4095a2a8d692155dc8533f55874"
   solver-name = "gps-cdcl"
   solver-version = 1
