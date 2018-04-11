@@ -7,10 +7,10 @@ services:
         expose:
             - 3306
         environment:
-            - MYSQL_ROOT_PASSWORD=root #rootのパスワード
-            - MYSQL_DATABASE=semirevel #revelデータベースの作成
-            - MYSQL_USER=revel #revelユーザの作成
-            - MYSQL_PASSWORD=revel #revelユーザのパスワード
+           MYSQL_ROOT_PASSWORD: root #rootのパスワード
+           MYSQL_DATABASE: semirevel #revelデータベースの作成
+           MYSQL_USER: revel #revelユーザの作成
+           MYSQL_PASSWORD: revel #revelユーザのパスワード
     web:
         build: . #Dockerfileをビルド
         ports:
