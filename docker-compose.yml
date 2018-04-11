@@ -14,7 +14,7 @@ services:
     web:
         build: . #Dockerfileをビルド
         ports:
-            - 9000:9000 #ポート9000番の開放
-        depends_on:
-            - db #dbとつなげる
+            - "9000:9000" #ポート9000番の開放
+        links:
+            - "db:mysql" #dbとつなげる
         command: revel run SemiRevel #docker-compose up の際にアプリケーション実行
