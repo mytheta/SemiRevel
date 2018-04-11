@@ -19,5 +19,4 @@ RUN dep ensure
 # Revel Run
 RUN go get github.com/revel/revel
 RUN go get github.com/revel/cmd/revel
-RUN revel run
 CMD ${SEMIREVELDIR}/SemiRevel
