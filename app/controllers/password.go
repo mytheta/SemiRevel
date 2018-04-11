@@ -45,7 +45,7 @@ func (c Password) Password() revel.Result {
 		return c.Redirect(Password.Input)
 	} else {
 
-		newpassword1 = toHash(c.Params.Form.Get(newpassword1))
+		newpassword1 = toHash(newpassword1)
 		DB.Model(&user).Update("password", newpassword1).Where("id = ?", id)
 		c.Flash.Success("passwordが変更できました．")
 	}
