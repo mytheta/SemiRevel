@@ -1,3 +1,6 @@
 test-results/
 tmp/
 vendor/
+materials/
+routes/
+.idea/
