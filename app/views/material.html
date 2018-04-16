@@ -4,7 +4,7 @@
       <tr>
           <th>名前</th>
           <th>年</th>
-          <th>月</th>
+          <th>月日</th>
           <th>資料</th>
           <th>コメント</th>
       </tr>
@@ -14,7 +14,7 @@
           <tr>
           <td>{{.Name}}</td>
           <td>{{.Year}}</td>
-              <td>{{.Month}}</td>
+              <td>{{.Month}}/{{.Day}}</td>
               <td><a href={{.File_path}} download>{{.Material_name}}</td>
                 <td>{{.Comment}}</td>
           </tr>

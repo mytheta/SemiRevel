@@ -128,6 +128,8 @@ func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 	err := os.MkdirAll(materialsPATH, 0777)
 	fmt.Println(err)
 
+	materialsPATH = filepath.Join("/SemiRevel", materialsPATH)
+
 	//uploadedfileディレクトリに受け取ったファイル名でファイルを作成
 	uploadedFile, err := os.Create(createPATH + "/" + randomName)
 	fmt.Printf("imgFile => %v\n", uploadedFile)
@@ -180,7 +182,7 @@ func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 	buf.WriteString("\r\n")
 	buf.WriteString("Subject:" + "ゼミ資料管理システム") //件名
 	buf.WriteString("\r\n")
-	buf.WriteString(id + "さんが新しい資料を登録しました\n")
+	buf.WriteString(id + "さんが新しい資料(" + materialName + ")を登録しました\n")
 	buf.WriteString("http://onyx.u-gakugei.ac.jp/SemiRevel/ からご確認ください\n")
 	if _, err = buf.WriteTo(wc); err != nil {
 		log.Fatal(err)
