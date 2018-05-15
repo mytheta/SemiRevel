@@ -6,7 +6,7 @@
           <th>年</th>
           <th>月日</th>
           <th>資料</th>
-          <th>コメント</th>
+          <th>議事録</th>
       </tr>
     </thead>
     <tbody>
@@ -16,7 +16,7 @@
           <td>{{.Year}}</td>
               <td>{{.Month}}/{{.Day}}</td>
               <td><a href={{.File_path}} download>{{.Material_name}}</td>
-                <td>{{.Comment}}</td>
+                <td><pre>{{.Comment}}</pre></td>
           </tr>
           {{end}}
 

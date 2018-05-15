@@ -1,0 +1,28 @@
+{{template "layout.html" .}}
+<body>
+  <div class="jumbotron text-center" style="background-color:#FFE;coror:#000">
+   	 		<h1 class="text-center">SemiRevel</h1>
+   	 	</div>
+      <h1 class="center-block text-info">学生達</h1>
+      <div class="alt-table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+                <th>名前</th>
+                <th>卒論</th>
+            </tr>
+          </thead>
+          <tbody>
+              {{range .users}}
+                <tr>
+                <td>{{.Name}}</td>
+                <td>{{.Thesis}}</td>
+                </tr>
+                {{end}}
+
+          </tbody>
+        </table>
+      </div>
+</body>
+
+ {{template "footer.html" .}}

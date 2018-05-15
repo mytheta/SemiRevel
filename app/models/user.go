@@ -6,4 +6,5 @@ type User struct {
 	Password string `json:"password"`
 	Grade    string `json:"grade"`
 	Role     int    `json:"role"`
+	Thesis   string `json:"Thesis"`
 }
