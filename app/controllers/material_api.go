@@ -3,8 +3,11 @@ package controllers
 import (
 	"SemiRevel/app/models"
 	"SemiRevel/app/routes"
+	"bytes"
 	"fmt"
 	"io"
+	"log"
+	"net/smtp"
 	"os"
 	"path/filepath"
 	"strings"
@@ -76,6 +79,11 @@ func (c MaterialApi) SelectGrade() revel.Result {
 
 func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 
+	user := models.User{}
+	DB.Table("users").Select("users.name, users.thesis").Scan(&user)
+
+	userName := user.Name
+
 	//時間を取得
 	time := time.Now()
 	year, month, date := time.Date()
@@ -85,16 +93,23 @@ func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 	grade := c.Params.Route.Get("grade")
 	id := c.Params.Route.Get("user_id")
 
-	c.Validation.Required("material_name")
-	c.Validation.Required("comment")
 	materialName := c.Params.Form.Get("material_name")
 	comment := c.Params.Form.Get("comment")
 
-	// 現在のディレクトリを取得
-	pwd, _ := os.Getwd()
-
 	// アップロードしたファイルのファイル名を取得
 	fileName := c.Params.Files["file"][0].Filename
+
+	c.Validation.Required(materialName).Message("この項目は必須項目です").Key("material_name")
+	c.Validation.Required(comment).Message("この項目は必須項目です").Key("comment")
+	c.Validation.Required(fileName).Message("資料を登録してください").Key("file")
+	if c.Validation.HasErrors() {
+		// Store the validation errors in the flash context and redirect.
+		c.Validation.Keep()
+		c.FlashParams()
+		return c.Redirect(MaterialApi.IndexMaterial)
+	}
+	// 現在のディレクトリを取得
+	pwd, _ := os.Getwd()
 
 	//アップロードしたファイルの取得
 	extension := strings.LastIndex(fileName, ".")
@@ -143,35 +158,35 @@ func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 	response := JsonResponse{}
 	response.Response = material
 
-	// //メール機能
-	// //Connect to the remote SMTP server.
-	// d, err := smtp.Dial("sapphire.u-gakugei.ac.jp:25")
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// //Set the sender and recipient.
-	// d.Mail("SemiRevel@sapphire.u-gakugei.ac.jp") // メールの送り主を指定
-	// d.Rcpt("hazelab@sapphire.u-gakugei.ac.jp")   // 受信者を指定
-	//
-	// // Send the email body.
-	// wc, err := d.Data()
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// defer wc.Close()
-	// //ToにするかCcにするかBccにするかはDATAメッセージ次第
-	// buf := bytes.NewBufferString("To:hazelab@sapphire.u-gakugei.ac.jp")
-	// buf.WriteString("\r\n") // DATA メッセージはCRLFのみ
-	// buf.WriteString("\r\n")
-	// buf.WriteString("Subject:" + "ゼミ資料管理システム") //件名
-	// buf.WriteString("\r\n")
-	// buf.WriteString(id + "さんが新しい資料(" + materialName + ")を登録しました\n")
-	// buf.WriteString("http://onyx.u-gakugei.ac.jp/SemiRevel/ からご確認ください\n")
-	// if _, err = buf.WriteTo(wc); err != nil {
-	// 	log.Fatal(err)
-	// }
-	//
-	// d.Quit() //メールセッションの終了
+	//メール機能
+	//Connect to the remote SMTP server.
+	d, err := smtp.Dial("sapphire.u-gakugei.ac.jp:25")
+	if err != nil {
+		log.Fatal(err)
+	}
+	//Set the sender and recipient.
+	d.Mail("SemiRevel@sapphire.u-gakugei.ac.jp") // メールの送り主を指定
+	d.Rcpt("hazelab@sapphire.u-gakugei.ac.jp")   // 受信者を指定
+
+	// Send the email body.
+	wc, err := d.Data()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer wc.Close()
+	//ToにするかCcにするかBccにするかはDATAメッセージ次第
+	buf := bytes.NewBufferString("To:m1@sapphire.u-gakugei.ac.jp")
+	buf.WriteString("\r\n") // DATA メッセージはCRLFのみ
+	buf.WriteString("\r\n")
+	buf.WriteString("Subject:" + "ゼミ資料管理システム") //件名
+	buf.WriteString("\r\n")
+	buf.WriteString(userName + "さんが新しい資料(" + materialName + ")を登録しました\n")
+	buf.WriteString("http://onyx.u-gakugei.ac.jp/SemiRevel/ からご確認ください\n")
+	if _, err = buf.WriteTo(wc); err != nil {
+		log.Fatal(err)
+	}
+
+	d.Quit() //メールセッションの終了
 
 	return c.Render()
 }
