@@ -79,11 +79,6 @@ func (c MaterialApi) SelectGrade() revel.Result {
 
 func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 
-	user := models.User{}
-	DB.Table("users").Select("users.name, users.thesis").Scan(&user)
-
-	userName := user.Name
-
 	//時間を取得
 	time := time.Now()
 	year, month, date := time.Date()
@@ -92,6 +87,10 @@ func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 	// ルーティングで設定したurlに含まれる :id とかの部分はc.Params.Route.Getで取得
 	grade := c.Params.Route.Get("grade")
 	id := c.Params.Route.Get("user_id")
+
+	user := models.User{}
+	DB.Table("users").Select("users.name, users.thesis").Scan(&user).Where("id = ?", id)
+	userName := user.Name
 
 	materialName := c.Params.Form.Get("material_name")
 	comment := c.Params.Form.Get("comment")
