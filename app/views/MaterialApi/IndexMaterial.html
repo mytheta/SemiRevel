@@ -1,51 +1,62 @@
 {{template "layout.html" .}}
 
 <div class="jumbotron text-center" style="background-color:#FFE;coror:#000">
-			<h1 class="text-center">SemiRevel</h1>
-		</div>
+	<h1 class="text-center">SemiRevel</h1>
+</div>
 
 
 <body>
 	<form action="/SemiRevel/material/{{.grade}}/{{.id}}" method="POST" enctype="multipart/form-data">
-    <h1 class="center-block text-info">資料登録</h1>
-    <div class="alt-table-responseve">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>タイトル</th>
-                    <td>
-											{{with $field := field "material_name" .}}
-    										<div class="controls {{$field.ErrorClass}}">
-												<input type="text" class="form-control" name="{{$field.Name}}" value="{{$field.Value}}">
-												 {{if $field.Error}}<span class="text-error">*{{$field.Error}}</span>{{end}}
-											</div>
-										  {{end}}
-										</td>
-                </tr>
-                    <th>ファイル</th>
-										{{with $field := field "file" .}}
-											<div class="controls {{$field.ErrorClass}}">
-                    <td><input type="file" class="form-control" name="file">
-										 {{if $field.Error}}<span class="text-error">*{{$field.Error}}</span>{{end}}
-										</td>
-									</div>
-									{{end}}
-                </tr>
-							</tr>
-									<th>議事録の内容</th>
-									{{with $field := field "comment" .}}
-										<div class="controls {{$field.ErrorClass}}">
-									<td><textarea class="form-control" name="comment" id="comment" placeholder="次回までやっていくことなど"></textarea>
-									 {{if $field.Error}}<span class="text-error">*{{$field.Error}}</span>{{end}}
-									 </td>
-								</div>
-								{{end}}
-							</tr>
-						</thead>
-        </table>
-    </div>
-    <input type="submit" value="登録" class="btn btn-success">
-    <br>
-    </form>
-    </body>
- {{template "footer.html" .}}
+		<h1 class="center-block text-info">資料登録</h1>
+		<div class="alt-table-responseve">
+			<table class="table">
+				<tbody>
+					<tr>
+						<th>タイトル</th>
+						<td>
+							{{with $field := field "material_name" .}}
+							<div class="controls {{$field.ErrorClass}}">
+								<input type="text" class="form-control" name="{{$field.Name}}" value="{{$field.Value}}">
+								{{if $field.Error}}<span class="text-error">*{{$field.Error}}</span>{{end}}
+							</div>
+							{{end}}
+						</td>
+					</tr>
+					<tr>
+						<th>日付</th>
+						<td>
+							<select name="year" id="year">
+							</select>
+							<select name="month" id="month">
+							</select>
+							<select name="day" id="day">
+							</select></td>
+						</tr>	<tr>
+							<th>ファイル</th>
+							{{with $field := field "file" .}}
+							<div class="controls {{$field.ErrorClass}}">
+								<td><input type="file" class="form-control" name="file">
+									{{if $field.Error}}<span class="text-error">*{{$field.Error}}</span>{{end}}
+								</td>
+							</div>
+							{{end}}
+						</tr>
+						<tr>
+							<th>議事録の内容</th>
+							{{with $field := field "comment" .}}
+							<div class="controls {{$field.ErrorClass}}">
+								<td><textarea class="form-control" name="comment" id="comment" placeholder="前回の議論"></textarea>
+									{{if $field.Error}}<span class="text-error">*{{$field.Error}}</span>{{end}}
+								</td>
+							</div>
+							{{end}}
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<input type="submit" value="登録" class="btn btn-success">
+			<br>
+		</form>
+	</body>
+	{{template "time.js" .}}
+	{{template "footer.html" .}}

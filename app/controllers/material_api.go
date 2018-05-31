@@ -10,8 +10,8 @@ import (
 	"net/smtp"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
-	"time"
 
 	"github.com/revel/revel"
 )
@@ -80,9 +80,9 @@ func (c MaterialApi) SelectGrade() revel.Result {
 func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 
 	//時間を取得
-	time := time.Now()
-	year, month, date := time.Date()
-	intMonth := int(month)
+	year, _ := strconv.Atoi(c.Params.Form.Get("year"))
+	month, _ := strconv.Atoi(c.Params.Form.Get("month"))
+	day, _ := strconv.Atoi(c.Params.Form.Get("day"))
 
 	// ルーティングで設定したurlに含まれる :id とかの部分はc.Params.Route.Getで取得
 	grade := c.Params.Route.Get("grade")
@@ -146,8 +146,8 @@ func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 		File_name:     randomName,
 		User_id:       c.Params.Route.Get("user_id"),
 		Year:          year,
-		Month:         intMonth,
-		Day:           date,
+		Month:         month,
+		Day:           day,
 		File_path:     materialsPATH,
 		Comment:       comment,
 	}
