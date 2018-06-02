@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"SemiRevel/app/models"
+	"fmt"
 	"path/filepath"
 
 	"github.com/revel/revel"
@@ -56,5 +57,6 @@ func (c User) UpdateIndex() revel.Result {
 }
 
 func init() {
-	revel.InterceptFunc(CheckUser, revel.BEFORE, &Password{})
+	fmt.Println("なぜこない")
+	revel.InterceptFunc(CheckUser, revel.BEFORE, &User{})
 }

@@ -10,6 +10,7 @@ import (
 
 var DB *gorm.DB
 
+//InitDB 関数
 func InitDB() {
 	// gormでMySQL接続
 	// 失敗したらerrに格納される
