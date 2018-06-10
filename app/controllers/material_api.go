@@ -89,7 +89,7 @@ func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 	id := c.Params.Route.Get("user_id")
 
 	user := models.User{}
-	DB.Table("users").Select("users.name, users.thesis").Scan(&user).Where("id = ?", id)
+	DB.Where("id = ?", id).First(&user)
 	userName := user.Name
 
 	materialName := c.Params.Form.Get("material_name")
@@ -174,7 +174,7 @@ func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 	}
 	defer wc.Close()
 	//ToにするかCcにするかBccにするかはDATAメッセージ次第
-	buf := bytes.NewBufferString("To:m1@sapphire.u-gakugei.ac.jp")
+	buf := bytes.NewBufferString("To:hazelab@sapphire.u-gakugei.ac.jp")
 	buf.WriteString("\r\n") // DATA メッセージはCRLFのみ
 	buf.WriteString("\r\n")
 	buf.WriteString("Subject:" + "ゼミ資料管理システム") //件名
