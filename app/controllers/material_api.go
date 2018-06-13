@@ -23,48 +23,16 @@ type MaterialJoinsUser struct {
 	models.User
 }
 
-func (c MaterialApi) Home() revel.Result {
-
-	id := c.Session["id"]
-	grade := c.Session["grade"]
-	materials := []MaterialJoinsUser{}
-	DB.Table("materials").Select("materials.*, users.name, users.id").Joins("INNER JOIN users ON users.id = materials.user_id").Order("material_id desc").Limit(10).Scan(&materials)
-	for n, material := range materials {
-		material.File_path = filepath.Join(material.File_path, material.File_name)
-		materials[n] = material
-		fmt.Println(material.File_path)
-	}
-
-	return c.Render(materials, id, grade)
-
-}
-
-func (c MaterialApi) IndexMaterial() revel.Result {
+func (c MaterialApi) Index() revel.Result {
 
 	return c.Render(c.Session["grade"], c.Session["id"])
-}
-
-func (c MaterialApi) GradeMaterials() revel.Result {
-	fmt.Println(c.Params.Route.Get("grade"))
-	id := c.Session["id"]
-	grade := c.Session["grade"]
-	selectgrade := c.Params.Route.Get("grade")
-	materials := []MaterialJoinsUser{}
-	DB.Where("grade = ?", selectgrade).Table("materials").Select("materials.*, users.name, users.id").Joins("INNER JOIN users ON users.id = materials.user_id").Order("material_id desc").Limit(100).Scan(&materials)
-	for n, material := range materials {
-		material.File_path = filepath.Join(material.File_path, material.File_name)
-		materials[n] = material
-		fmt.Println(material.File_path)
-	}
-
-	return c.Render(materials, id, grade)
 }
 
 func (c MaterialApi) SelectGrade() revel.Result {
 	return c.Render(c.Session["id"])
 }
 
-func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
+func (c MaterialApi) Create(file *os.File) revel.Result {
 
 	//時間を取得
 	year, _ := strconv.Atoi(c.Params.Form.Get("year"))
@@ -92,7 +60,7 @@ func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 		// Store the validation errors in the flash context and redirect.
 		c.Validation.Keep()
 		c.FlashParams()
-		return c.Redirect(MaterialApi.IndexMaterial)
+		return c.Redirect(MaterialApi.Index)
 	}
 	// 現在のディレクトリを取得
 	pwd, _ := os.Getwd()
@@ -146,6 +114,22 @@ func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 	return c.Render()
 }
 
+func (c MaterialApi) GradeMaterials() revel.Result {
+	fmt.Println(c.Params.Route.Get("grade"))
+	id := c.Session["id"]
+	grade := c.Session["grade"]
+	selectgrade := c.Params.Route.Get("grade")
+	materials := []MaterialJoinsUser{}
+	DB.Where("grade = ?", selectgrade).Table("materials").Select("materials.*, users.name, users.id").Joins("INNER JOIN users ON users.id = materials.user_id").Order("material_id desc").Limit(100).Scan(&materials)
+	for n, material := range materials {
+		material.File_path = filepath.Join(material.File_path, material.File_name)
+		materials[n] = material
+		fmt.Println(material.File_path)
+	}
+
+	return c.Render(materials, id, grade)
+}
+
 func (c MaterialApi) File() revel.Result {
 	pwd, _ := os.Getwd()
 	path := filepath.Join("/materials/", c.Params.Route.Get("grade"))
@@ -158,14 +142,6 @@ func (c MaterialApi) File() revel.Result {
 	}
 	fmt.Println(path)
 	return c.RenderFile(f, revel.Inline)
-}
-
-func (c MaterialApi) DeleteMaterial() revel.Result {
-
-	id := c.Session["id"]
-	grade := c.Session["grade"]
-
-	return c.Render(id, grade)
 }
 
 func CheckUser(c *revel.Controller) revel.Result {

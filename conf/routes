@@ -10,20 +10,19 @@ module:testrunner
 POST    /SemiRevel/login                                     Authentication.Login
 GET     /SemiRevel/logout                                    Authentication.Logout
 GET     /SemiRevel/                                          App.Index
-GET     /SemiRevel/home                                      MaterialApi.Home
-POST    /SemiRevel/material/:grade/:user_id                  MaterialApi.PostMaterial
-GET     /SemiRevel/regist                                    MaterialApi.IndexMaterial
-GET     /SemiRevel/materials/grade                           MaterialApi.SelectGrade
-GET     /SemiRevel/materials/grade/:grade                    MaterialApi.GradeMaterials
+GET     /SemiRevel/home                                      App.Home
+GET     /SemiRevel/create                                    MaterialApi.Index
+POST    /SemiRevel/create                                    MaterialApi.Create
+GET     /SemiRevel/materials                                 MaterialApi.SelectGrade
+GET     /SemiRevel/materials/:grade                          MaterialApi.GradeMaterials
 GET     /SemiRevel/materials/:grade/:user_id/:file_path      MaterialApi.File
-GET     /SemiRevel/password/                                 Password.Index
-GET     /SemiRevel/password/input                            Password.Input
-POST    /SemiRevel/password/change                           Password.Password
-GET     /SemiRevel/material/delete                           MaterialApi.DeleteMaterial
+GET     /SemiRevel/mypage/                                   User.Mypage
+GET     /SemiRevel/user/password/                            User.Input
+POST    /SemiRevel/user/password/                            User.Password
 GET     /SemiRevel/user                                      User.Index
 GET     /SemiRevel/user/thesis                               User.Thesis
 GET     /SemiRevel/thesis                                    User.UpdateIndex
-POST    /SemiRevel/thesis/update                             User.UpdateThesis
+POST    /SemiRevel/thesis                                    User.UpdateThesis
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
