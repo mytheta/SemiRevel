@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"SemiRevel/app/helpers"
 	"SemiRevel/app/models"
 	"fmt"
 
@@ -30,7 +31,7 @@ func (c Password) Password() revel.Result {
 	user := models.User{}
 	DB.Where("id = ?", id).First(&user)
 
-	password := toHash(c.Params.Form.Get("password"))
+	password := helpers.ToHash(c.Params.Form.Get("password"))
 	newpassword1 := c.Params.Form.Get("new_password1")
 	newpassword2 := c.Params.Form.Get("new_password2")
 
@@ -45,7 +46,7 @@ func (c Password) Password() revel.Result {
 		return c.Redirect(Password.Input)
 	} else {
 
-		newpassword1 = toHash(newpassword1)
+		newpassword1 = helpers.ToHash(newpassword1)
 		DB.Model(&user).Update("password", newpassword1).Where("id = ?", id)
 		c.Flash.Success("passwordが変更できました．")
 	}

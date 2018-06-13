@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"SemiRevel/app/models"
-	"fmt"
 	"path/filepath"
 
 	"github.com/revel/revel"
@@ -57,6 +56,5 @@ func (c User) UpdateIndex() revel.Result {
 }
 
 func init() {
-	fmt.Println("なぜこない")
 	revel.InterceptFunc(CheckUser, revel.BEFORE, &User{})
 }

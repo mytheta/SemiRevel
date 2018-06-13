@@ -1,4 +1,4 @@
-package controllers
+package helpers
 
 import (
 	"crypto/rand"
@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-func random() string {
+func Random() string {
 	var n uint64
 	binary.Read(rand.Reader, binary.LittleEndian, &n)
 	return strconv.FormatUint(n, 10)

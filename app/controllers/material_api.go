@@ -1,13 +1,11 @@
 package controllers
 
 import (
+	"SemiRevel/app/helpers"
 	"SemiRevel/app/models"
 	"SemiRevel/app/routes"
-	"bytes"
 	"fmt"
 	"io"
-	"log"
-	"net/smtp"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -37,19 +35,13 @@ func (c MaterialApi) Home() revel.Result {
 		fmt.Println(material.File_path)
 	}
 
-	for _, material := range materials {
-		fmt.Println(material.File_path)
-	}
-
 	return c.Render(materials, id, grade)
 
 }
 
 func (c MaterialApi) IndexMaterial() revel.Result {
-	id := c.Session["id"]
-	grade := c.Session["grade"]
 
-	return c.Render(grade, id)
+	return c.Render(c.Session["grade"], c.Session["id"])
 }
 
 func (c MaterialApi) GradeMaterials() revel.Result {
@@ -65,16 +57,11 @@ func (c MaterialApi) GradeMaterials() revel.Result {
 		fmt.Println(material.File_path)
 	}
 
-	for _, material := range materials {
-		fmt.Println(material.File_path)
-	}
-
 	return c.Render(materials, id, grade)
 }
 
 func (c MaterialApi) SelectGrade() revel.Result {
-	id := c.Session["id"]
-	return c.Render(id)
+	return c.Render(c.Session["id"])
 }
 
 func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
@@ -114,7 +101,7 @@ func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 	extension := strings.LastIndex(fileName, ".")
 
 	//ファイル名をランダムの数値に変換
-	randomName := random()
+	randomName := helpers.Random()
 	randomName += fileName[extension:]
 
 	//fileを連結 (/Users/yutsukimiyashita/dev/src/SemiRevel/materials/grade/id/)
@@ -154,38 +141,7 @@ func (c MaterialApi) PostMaterial(file *os.File) revel.Result {
 
 	DB.Create(material)
 
-	response := JsonResponse{}
-	response.Response = material
-
-	//メール機能
-	//Connect to the remote SMTP server.
-	d, err := smtp.Dial("sapphire.u-gakugei.ac.jp:25")
-	if err != nil {
-		log.Fatal(err)
-	}
-	//Set the sender and recipient.
-	d.Mail("SemiRevel@sapphire.u-gakugei.ac.jp") // メールの送り主を指定
-	d.Rcpt("hazelab@sapphire.u-gakugei.ac.jp")   // 受信者を指定
-
-	// Send the email body.
-	wc, err := d.Data()
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer wc.Close()
-	//ToにするかCcにするかBccにするかはDATAメッセージ次第
-	buf := bytes.NewBufferString("To:hazelab@sapphire.u-gakugei.ac.jp")
-	buf.WriteString("\r\n") // DATA メッセージはCRLFのみ
-	buf.WriteString("\r\n")
-	buf.WriteString("Subject:" + "ゼミ資料管理システム") //件名
-	buf.WriteString("\r\n")
-	buf.WriteString(userName + "さんが新しい資料(" + materialName + ")を登録しました\n")
-	buf.WriteString("http://onyx.u-gakugei.ac.jp/SemiRevel/ からご確認ください\n")
-	if _, err = buf.WriteTo(wc); err != nil {
-		log.Fatal(err)
-	}
-
-	d.Quit() //メールセッションの終了
+	helpers.Mail(userName, materialName)
 
 	return c.Render()
 }
@@ -202,14 +158,6 @@ func (c MaterialApi) File() revel.Result {
 	}
 	fmt.Println(path)
 	return c.RenderFile(f, revel.Inline)
-}
-
-func (c MaterialApi) ViewMaterial() revel.Result {
-
-	response := JsonResponse{}
-	response.Response = "put article"
-
-	return c.RenderJSON(response)
 }
 
 func (c MaterialApi) DeleteMaterial() revel.Result {

@@ -1,11 +1,11 @@
-package controllers
+package helpers
 
 import (
 	"crypto/sha256"
 	"encoding/hex"
 )
 
-func toHash(password string) string {
+func ToHash(password string) string {
 	converted := sha256.Sum256([]byte(password))
 	return hex.EncodeToString(converted[:])
 }

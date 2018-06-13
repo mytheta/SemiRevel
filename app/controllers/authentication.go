@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"SemiRevel/app/helpers"
 	"SemiRevel/app/models"
 	"SemiRevel/app/routes"
 	"fmt"
@@ -14,7 +15,7 @@ type Authentication struct {
 
 func (c Authentication) Login() revel.Result {
 	id := c.Params.Form.Get("id")
-	password := toHash(c.Params.Form.Get("password"))
+	password := helpers.ToHash(c.Params.Form.Get("password"))
 	user := models.User{}
 	DB.Where("id = ?", id).First(&user)
 
