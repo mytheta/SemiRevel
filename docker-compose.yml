@@ -12,6 +12,8 @@ services:
            MYSQL_DATABASE: semirevel #revelデータベースの作成
            MYSQL_USER: revel #revelユーザの作成
            MYSQL_PASSWORD: revel #revelユーザのパスワード
+        volumes:
+            - "./mysql:/docker-entrypoint-initdb.d"
     web:
         build: . #Dockerfileをビルド
         ports:

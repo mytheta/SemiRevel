@@ -10,7 +10,7 @@ ENV SEMIREVELDIR ${GOPATH}/src/SemiRevel
 RUN mkdir ${SEMIREVELDIR}
 
 
-COPY . ${SEMIREVELDIR}
+# COPY . ${SEMIREVELDIR}
 WORKDIR ${SEMIREVELDIR}
 # Go dep!
 RUN go get -u github.com/golang/dep/...
