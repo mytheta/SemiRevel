@@ -2,57 +2,87 @@
 <html>
 {{template "header.html" .}}
 	<body>
-	  <div class="container">
-      <!-- Static navbar -->
-			<nav class="navbar navbar-default">
-			 <div class="container-fluid">
-				 <div class="navbar-header">
-					 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-						 <span class="sr-only">Toggle navigation</span>
-						 <span class="icon-bar"></span>
-						 <span class="icon-bar"></span>
-						 <span class="icon-bar"></span>
-					 </button>
-					 <a class="navbar-brand" href="/SemiRevel/home">SemiRevel</a>
-				 </div>
-				 <div id="navbar" class="navbar-collapse collapse">
-					 <ul class="nav navbar-nav">
-						 <li><a href="/SemiRevel/mypage">MyPage</a></li>
-						 <li><a href="/SemiRevel/create">登録</a></li>
-						 <li><a href="/SemiRevel/materials">閲覧</a></li>
-						 <li><a href="/SemiRevel/user/thesis">卒論タイトル</a></li>
+<div class="ui grid pointing menu">
+            <div class="ui purple menu">
+                <a class="active link item" href="/SemiRevel/home">
+                    <i class="home icon"></i> Home
+                </a>
+								<a class="link item" href="/SemiRevel/mypage">
+							my page
+							  </a>
+							  <a class="link item" href="/SemiRevel/create">
+							    <i class="pencil alternate icon"></i>登録
+							  </a>
+								<a class="link item" href="/SemiRevel/materials">
+							    <i class="file icon"></i>閲覧
+							  </a>
+								<a class="link item" href="/SemiRevel/user/thesis">
+							    <i class="bookmark outline icon"></i>卒論タイトル
+							  </a>
+							  <div class="right menu">
+									<a class="ui item" >
+	 <i class="user icon"></i>ようこそ{{.id}}さん
+ </a>
+							    <div class="item">
+							      <div class="ui icon input">
+							        <input type="text" placeholder="Search...">
+							        <i class="search link icon"></i>
+                        </div>
+                    </div>
+										<a class="ui item" href="/SemiRevel/logout">
+		 Logout
+	 </a>
+                </div>
+            </div>
+        </div>
+    </div>
+		<br>
+		<div class="jumbotron text-center" style="background-color:#694F91;color:#000">
+			<h1 class="text-center">SemiRevel</h1>
+		</div>
 
-					 </ul>
-					 <ul class="nav navbar-nav navbar-right">
-						 <li><a href="/SemiRevel/user">ようこそ{{.id}}さん</a></li>
-						 <li><a href="/SemiRevel/logout">ログアウト</a></li>
-					 </ul>
-				 </div><!--/.nav-collapse -->
-			 </div><!--/.container-fluid -->
-		 </nav>
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
 	</body>
 
-		<!-- <script type='text/javascript'>
-		$(function(){
-			$('#navbar li a').each(function(){
-				var $href = $(this).attr('href');
-				if(location.href.match($href)) {
-					$(this).parent().addClass('active');
-				}
-				else {
-					$('#navbar li a').removeClass('active');
-				}
-				if(location.href.match("/gakugeiJob/enterprise/editEnterprise/") && $href=="/gakugeiJob/enterprise/viewEnterprise/"){
-					$(this).parent().addClass('active');
-				}
-				if(location.href.match("/gakugeiJob/enterprise/editOffer/") && $href=="/gakugeiJob/enterprise/viewMyOffer/"){
-					$(this).parent().addClass('active');
-				}
-			});
-		});
-	</script> -->
+	<script>
+	$('.ui.purple.menu')
+    .on('click', '.item', function() {
+      if(!$(this).hasClass('dropdown')) {
+        $(this)
+          .addClass('active')
+          .siblings('.item')
+            .removeClass('active');
+      }
+    });
+
+		menu = {};
+
+// ready event
+menu.ready = function() {
+
+  // selector cache
+  var
+    $menuItem = $('.menu a.item, .menu .link.item'),
+    // alias
+    handler = {
+      activate: function() {
+        $(this)
+        .addClass('active')
+        .closest('.ui.menu')
+        .find('.item')
+        .not($(this))
+        .removeClass('active');
+      }
+    }
+  ;
+
+  $menuItem
+    .on('click', handler.activate)
+  ;
+
+};
+
+
+// attach ready event
+$(document).ready(menu.ready);
+	</script>
 </html>

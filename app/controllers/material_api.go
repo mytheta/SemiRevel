@@ -24,12 +24,14 @@ type MaterialJoinsUser struct {
 }
 
 func (c MaterialApi) Index() revel.Result {
-
-	return c.Render(c.Session["grade"], c.Session["id"])
+	id := c.Session["id"]
+	grade := c.Session["grade"]
+	return c.Render(id, grade)
 }
 
 func (c MaterialApi) SelectGrade() revel.Result {
-	return c.Render(c.Session["id"])
+	id := c.Session["id"]
+	return c.Render(id)
 }
 
 func (c MaterialApi) Create(file *os.File) revel.Result {
@@ -40,12 +42,13 @@ func (c MaterialApi) Create(file *os.File) revel.Result {
 	day, _ := strconv.Atoi(c.Params.Form.Get("day"))
 
 	// ルーティングで設定したurlに含まれる :id とかの部分はc.Params.Route.Getで取得
-	grade := c.Params.Route.Get("grade")
-	id := c.Params.Route.Get("user_id")
+	grade := c.Session["grade"]
+	id := c.Session["id"]
+	fmt.Println(id)
 
 	user := models.User{}
 	DB.Where("id = ?", id).First(&user)
-	userName := user.Name
+	//userName := user.Name
 
 	materialName := c.Params.Form.Get("material_name")
 	comment := c.Params.Form.Get("comment")
@@ -99,7 +102,7 @@ func (c MaterialApi) Create(file *os.File) revel.Result {
 	material := &models.Material{
 		Material_name: materialName,
 		File_name:     randomName,
-		User_id:       c.Params.Route.Get("user_id"),
+		User_id:       id,
 		Year:          year,
 		Month:         month,
 		Day:           day,
@@ -109,7 +112,7 @@ func (c MaterialApi) Create(file *os.File) revel.Result {
 
 	DB.Create(material)
 
-	helpers.Mail(userName, materialName)
+	//helpers.Mail(userName, materialName)
 
 	return c.Render()
 }
