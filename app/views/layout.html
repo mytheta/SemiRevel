@@ -13,27 +13,36 @@
 							  <a class="link item" href="/SemiRevel/create">
 							    <i class="pencil alternate icon"></i>登録
 							  </a>
-								<a class="link item" href="/SemiRevel/materials">
-							    <i class="file icon"></i>閲覧
-							  </a>
+
+
+								<div class="ui compact menu">
+  <div class="ui simple dropdown item">
+     <i class="file icon"></i>閲覧
+    <i class="dropdown icon"></i>
+    <div class="menu">
+      <div class="item"><a href="/SemiRevel/materials/M1">M1</a></div>
+      <div class="item"><a href="/SemiRevel/materials/B4">B4</a></div>
+      <div class="item"><a href="/SemiRevel/materials/B3">B3</a></div>
+    </div>
+  </div>
+</div>
 								<a class="link item" href="/SemiRevel/user/thesis">
 							    <i class="bookmark outline icon"></i>卒論タイトル
 							  </a>
 							  <div class="right menu">
 
-									<div class="ui selection dropdown item">
-									  <input type="hidden" name="gender">
-									  <i class="dropdown icon"></i>
-									  <div class="default text">Gender</div>
-									  <div class="menu">
-									    <div class="item" data-value="1">Male</div>
-									    <div class="item" data-value="0">Female</div>
-									  </div>
-									</div>
+									<div class="ui teal buttons">
+  <div class="ui button"> <i class="user icon"></i>ようこそ{{.id}}さん</div>
+  <div class="ui floating dropdown icon button">
+    <i class="dropdown icon"></i>
+    <div class="menu">
+      <div class="item"><i class="edit icon"></i> <a href="/SemiRevel/user/password">パスワードを変更する</a></div>
+      <div class="item"><i class="edit icon"></i><a href="/SemiRevel/thesis">卒論タイトル変更</a></div>
+    </div>
+  </div>
+</div>
 
-									<a class="ui item" href="/SemiRevel/user">
-	 <i class="user icon"></i>ようこそ{{.id}}さん
- </a>
+
 							    <div class="item">
 							      <div class="ui icon input">
 							        <input type="text" placeholder="Search...">
@@ -46,7 +55,6 @@
                 </div>
             </div>
         </div>
-    </div>
 		<br>
 		<div class="jumbotron text-center" style="background-color:#694F91;color:#000">
 			<h1 class="text-center">SemiRevel</h1>
@@ -55,6 +63,12 @@
 <div class="ui container">
 
 	<script>
+	    $('.ui.dropdown')
+	            .dropdown();
+	</script>
+	<script>
+
+
 	$('.ui.purple.menu')
     .on('click', '.item', function() {
       if(!$(this).hasClass('dropdown')) {
