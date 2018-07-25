@@ -20,7 +20,18 @@
 							    <i class="bookmark outline icon"></i>卒論タイトル
 							  </a>
 							  <div class="right menu">
-									<a class="ui item" >
+
+									<div class="ui selection dropdown item">
+									  <input type="hidden" name="gender">
+									  <i class="dropdown icon"></i>
+									  <div class="default text">Gender</div>
+									  <div class="menu">
+									    <div class="item" data-value="1">Male</div>
+									    <div class="item" data-value="0">Female</div>
+									  </div>
+									</div>
+
+									<a class="ui item" href="/SemiRevel/user">
 	 <i class="user icon"></i>ようこそ{{.id}}さん
  </a>
 							    <div class="item">
