@@ -1,46 +1,56 @@
 <div class="alt-table-responsive">
-  <table class="ui purple celled striped table">
-  <thead>
-    <tr>
-      <th>年</th>
-      <th>月日</th>
-      <th><i class="file alternate icon"></i>資料</th>
-      <th><i class="comment alternate outline icon"></i>議事録</th>
-  </tr></thead>
-  <tbody>
-    {{range .materials}}
-      <tr>
-      <td>{{.Year}}</td>
-          <td>{{.Month}}/{{.Day}}</td>
-          <td><a href={{.File_path}} download><i class="cloud download icon"></i>{{.Material_name}}</td>
-            <td><pre>{{.Comment}}</pre><a href="/SemiRevel/material/delete/{{.Material_id}}" onClick="disp()"><div class="right aligned"><i class="trash alternate icon"></i></a> <a href="/SemiRevel/material/edit/{{.Material_id}}"><i class="edit icon"></a></div></td>
-      </tr>
-      {{end}}
-  </tbody>
-</table>
+    <table class="ui purple celled striped table">
+        <thead>
+        <tr>
+            <th>年</th>
+            <th>月日</th>
+            <th><i class="file alternate icon"></i>資料</th>
+            <th><i class="comment alternate outline icon"></i>議事録</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{range .materials}}
+        <tr>
+            <td>{{.Year}}</td>
+            <td>{{.Month}}/{{.Day}}</td>
+            <td><a href={{.File_path}} download><i class="cloud download icon"></i>{{.Material_name}}</a></td>
+            <td>
+                <pre>{{.Comment}}</pre>
+                <div class="right aligned">
+                    <a href="" id="delete" onClick="disp()"><i class="trash alternate icon"></i></a>
+                    <a href="/SemiRevel/material/edit/{{.Material_id}}"><i class="edit icon"></i></a>
+                </div>
+            </td>
+        </tr>
+        {{end}}
+        </tbody>
+    </table>
 
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
-function disp(){
+        function disp() {
 
-	// 「OK」時の処理開始 ＋ 確認ダイアログの表示
-	if(confirm('本当に削除しますか？')){
+            var target = document.getElementById("delete");
+            var materialId = target.value;
 
-		location.href = "/SemiRevel/material/delete/{{.Material_id}}"; // example_confirm.html へジャンプ
+            // 「OK」時の処理開始 ＋ 確認ダイアログの表示
+            if (confirm('本当に削除しますか？')) {
 
-    return true;
-	}　else{
+                target.href = "/SemiRevel/material/delete/" + materialId; // example_confirm.html へジャンプ
 
-		window.alert('キャンセルされました'); // 警告ダイアログを表示
-    location.href = "/SemiRevel/mypage"; // example_confirm.html へジャンプ
-    return false;
-	}
-	// 「キャンセル」時の処理終了
+            } else {
 
-}
+                window.alert('キャンセルされました'); // 警告ダイアログを表示
 
-</script>
+            }
+            // 「キャンセル」時の処理終了
+
+            return true;
+
+        }
+
+    </script>
 
 
 </div>
