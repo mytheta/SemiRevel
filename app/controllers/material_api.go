@@ -83,8 +83,7 @@ func (c MaterialApi) Create(file *os.File) revel.Result {
 	err := os.MkdirAll(materialsPATH, 0777)
 	fmt.Println(err)
 
-	materialsPATH = filepath.Join("/SemiRevel", materialsPATH)
-
+	fmt.Println(createPATH)
 	//uploadedfileディレクトリに受け取ったファイル名でファイルを作成
 	uploadedFile, err := os.Create(createPATH + "/" + randomName)
 	fmt.Printf("imgFile => %v\n", uploadedFile)
@@ -134,14 +133,59 @@ func (c MaterialApi) GradeMaterials() revel.Result {
 }
 
 func (c MaterialApi) Delete() revel.Result {
-	id := c.Session["id"]
-	grade := c.Session["grade"]
+	// id := c.Session["id"]
+	// grade := c.Session["grade"]
 	material := models.Material{}
 	material.Material_id, _ = strconv.Atoi(c.Params.Route.Get("id"))
 	DB.First(&material)
+
+	pwd, _ := os.Getwd()
+	createPATH := filepath.Join(pwd, material.File_path)
+	if err := os.Remove(createPATH + "/" + material.File_name); err != nil {
+		fmt.Println(err)
+	}
+
 	DB.Delete(&material)
 
-	return c.Render(id, grade)
+	c.Flash.Success("削除完了しました")
+	return c.Redirect(routes.User.Mypage())
+}
+
+func (c MaterialApi) EditIndex() revel.Result {
+	id := c.Session["id"]
+	grade := c.Session["grade"]
+	material_id, _ := strconv.Atoi(c.Params.Route.Get("id"))
+
+	material := models.Material{}
+	material.Material_id = material_id
+	DB.First(&material)
+	material_name := material.Material_name
+	year := material.Year
+	month := material.Month
+	day := material.Day
+	comment := material.Comment
+	fmt.Println(material_name)
+
+	return c.Render(material_name, year, month, day, comment, id, grade, material_id)
+}
+
+func (c MaterialApi) Edit() revel.Result {
+
+	materialName := c.Params.Form.Get("material_name")
+	comment := c.Params.Form.Get("comment")
+
+	material := models.Material{}
+	material.Material_id, _ = strconv.Atoi(c.Params.Route.Get("id"))
+	DB.First(&material)
+	material.Year, _ = strconv.Atoi(c.Params.Form.Get("year"))
+	material.Month, _ = strconv.Atoi(c.Params.Form.Get("month"))
+	material.Day, _ = strconv.Atoi(c.Params.Form.Get("day"))
+	material.Material_name = materialName
+	material.Comment = comment
+	DB.Save(&material)
+
+	c.Flash.Success("編集完了しました")
+	return c.Redirect(routes.User.Mypage())
 }
 
 func (c MaterialApi) File() revel.Result {

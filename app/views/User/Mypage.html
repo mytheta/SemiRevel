@@ -2,6 +2,18 @@
 
       <h1 class="center-block text-info">{{.thesis}}</h1>
 
+  {{if .flash.success}}
+      <div class="ui positive message">
+  <a href="/SemiRevel/mypage"><i class="close icon"></i></a>
+  <div class="header">
+    	{{.flash.success}}
+</div>
+</div>
+{{end}}
+
+<div class="ui icon button" data-content="Add users to your feed">
+  <i class="add icon"></i>
+</div>
 {{template "mymaterial.html" .}}
 
  {{template "footer.html" .}}

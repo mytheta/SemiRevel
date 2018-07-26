@@ -1,0 +1,41 @@
+{{template "layout.html" .}}
+
+<body>
+		<form class="ui form" action="/SemiRevel/material/edit/{{.material_id}}" method="POST" >
+
+	<div class="field">
+    <label>タイトル</label>
+    <input type="text" class="form-control" name="material_name" value="{{.material_name}}">
+  </div>
+
+	<div class="fields">
+    <div class="four wide field">
+      <label>日付</label>
+				<select name="year" id="year" >
+				</select>
+    </div>
+    <div class="three wide field">
+      <label>　 </label>
+			<select name="month" id="month">
+			</select>
+    </div>
+    <div class="three wide field">
+      <label> 　</label>
+      <div class="two fields">
+					<select name="day" id="day" >
+					</select>
+      </div>
+    </div>
+  </div>
+
+	<div class="field">
+		<label>前回の議事録の内容</label>
+			<textarea class="form-control" name="comment" id="comment" placeholder="{{.comment}}">{{.comment}}</textarea>
+	</div>
+
+	<input type="submit" value="登録" class="ui inverted purple button">
+	<br>
+</form>
+	</body>
+	{{template "edittime.js" .}}
+	{{template "footer.html" .}}

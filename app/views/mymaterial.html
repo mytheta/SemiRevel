@@ -1,10 +1,7 @@
 <div class="alt-table-responsive">
-  <table class="ui celled striped table">
+  <table class="ui purple celled striped table">
   <thead>
     <tr>
-      <th>削除</th>
-      <th>編集</th>
-      <th>名前</th>
       <th>年</th>
       <th>月日</th>
       <th><i class="file alternate icon"></i>資料</th>
@@ -13,16 +10,37 @@
   <tbody>
     {{range .materials}}
       <tr>
-        <td>　<a href="/SemiRevel/material/delete/{{.Material_id}}"><i class="bomb icon"></i></a></td>
-          <td>　<i class="edit icon"></i></td>
-      <td class="collapsing"><i class="user icon"></i>{{.Name}}</td>
       <td>{{.Year}}</td>
           <td>{{.Month}}/{{.Day}}</td>
           <td><a href={{.File_path}} download><i class="cloud download icon"></i>{{.Material_name}}</td>
-            <td><pre>{{.Comment}}</pre></td>
+            <td><pre>{{.Comment}}</pre><a href="/SemiRevel/material/delete/{{.Material_id}}" onClick="disp()"><div class="right aligned"><i class="trash alternate icon"></i></a> <a href="/SemiRevel/material/edit/{{.Material_id}}"><i class="edit icon"></a></div></td>
       </tr>
       {{end}}
   </tbody>
 </table>
+
+
+<script type="text/javascript">
+
+function disp(){
+
+	// 「OK」時の処理開始 ＋ 確認ダイアログの表示
+	if(confirm('本当に削除しますか？')){
+
+		location.href = "/SemiRevel/material/delete/{{.Material_id}}"; // example_confirm.html へジャンプ
+
+    return true;
+	}　else{
+
+		window.alert('キャンセルされました'); // 警告ダイアログを表示
+    location.href = "/SemiRevel/mypage"; // example_confirm.html へジャンプ
+    return false;
+	}
+	// 「キャンセル」時の処理終了
+
+}
+
+</script>
+
 
 </div>
