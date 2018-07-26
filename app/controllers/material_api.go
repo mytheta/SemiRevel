@@ -133,6 +133,17 @@ func (c MaterialApi) GradeMaterials() revel.Result {
 	return c.Render(materials, id, grade)
 }
 
+func (c MaterialApi) Delete() revel.Result {
+	id := c.Session["id"]
+	grade := c.Session["grade"]
+	material := models.Material{}
+	material.Material_id, _ = strconv.Atoi(c.Params.Route.Get("id"))
+	DB.First(&material)
+	DB.Delete(&material)
+
+	return c.Render(id, grade)
+}
+
 func (c MaterialApi) File() revel.Result {
 	pwd, _ := os.Getwd()
 	path := filepath.Join("/materials/", c.Params.Route.Get("grade"))

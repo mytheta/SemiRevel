@@ -23,6 +23,7 @@ GET     /SemiRevel/user                                      User.Index
 GET     /SemiRevel/user/thesis                               User.Thesis
 GET     /SemiRevel/thesis                                    User.UpdateIndex
 POST    /SemiRevel/thesis                                    User.UpdateThesis
+GET  /SemiRevel/material/delete/:id                       MaterialApi.Delete
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

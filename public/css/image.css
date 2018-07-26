@@ -1,0 +1,16 @@
+.wrap {
+overflow: hidden;
+}
+.arc {
+min-height: 300px;
+border-bottom-right-radius: 2000px 300px;
+border-bottom-left-radius: 2000px 300px;
+margin-left: -200px;
+margin-right: -200px;
+padding-left: 200px;
+padding-right: 200px;
+
+background-image: url(https://i.ytimg.com/vi/NtdgxQFQNZs/maxresdefault.jpg);
+background-size: cover;
+background-attachment:fixed;
+}
