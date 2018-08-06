@@ -1,13 +1,12 @@
 package controllers
 
 import (
+	"SemiRevel/app/daos"
 	"SemiRevel/app/helpers"
 	"SemiRevel/app/models"
 	"SemiRevel/app/routes"
 	"fmt"
-	"io"
 	"os"
-	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -29,32 +28,19 @@ func (c MaterialApi) Index() revel.Result {
 	return c.Render(id, grade)
 }
 
-func (c MaterialApi) SelectGrade() revel.Result {
-	id := c.Session["id"]
-	return c.Render(id)
-}
-
 func (c MaterialApi) Create(file *os.File) revel.Result {
 
 	//時間を取得
-	year, _ := strconv.Atoi(c.Params.Form.Get("year"))
-	month, _ := strconv.Atoi(c.Params.Form.Get("month"))
-	day, _ := strconv.Atoi(c.Params.Form.Get("day"))
-
-	// ルーティングで設定したurlに含まれる :id とかの部分はc.Params.Route.Getで取得
-	grade := c.Session["grade"]
-	id := c.Session["id"]
-	fmt.Println(id)
-
-	user := models.User{}
-	DB.Where("id = ?", id).First(&user)
-	//userName := user.Name
-
+	year, month, day := helpers.ConvertStringToInt(c.Params.Form.Get("year"), c.Params.Form.Get("month"), c.Params.Form.Get("day"))
 	materialName := c.Params.Form.Get("material_name")
 	comment := c.Params.Form.Get("comment")
-
-	// アップロードしたファイルのファイル名を取得
 	fileName := c.Params.Files["file"][0].Filename
+
+	grade := c.Session["grade"]
+	id := c.Session["id"]
+
+	//user := dao.ShowUser(id)
+	//userName := daos.ShowUserName(id)
 
 	c.Validation.Required(materialName).Message("この項目は必須項目です").Key("material_name")
 	c.Validation.Required(comment).Message("この項目は必須項目です").Key("comment")
@@ -65,55 +51,32 @@ func (c MaterialApi) Create(file *os.File) revel.Result {
 		c.FlashParams()
 		return c.Redirect(MaterialApi.Index)
 	}
-	// 現在のディレクトリを取得
-	pwd, _ := os.Getwd()
 
-	//アップロードしたファイルの取得
+	filePath := helpers.MkdirMaterialPath(id)
+
 	extension := strings.LastIndex(fileName, ".")
-
-	//ファイル名をランダムの数値に変換
 	randomName := helpers.Random()
 	randomName += fileName[extension:]
 
-	//fileを連結 (/Users/yutsukimiyashita/dev/src/SemiRevel/materials/grade/id/)
-	gradeID := filepath.Join(grade, id)
-	materialsPATH := filepath.Join("materials", gradeID)
-	createPATH := filepath.Join(pwd, materialsPATH)
-
-	err := os.MkdirAll(materialsPATH, 0777)
-	fmt.Println(err)
-
-	fmt.Println(createPATH)
-	//uploadedfileディレクトリに受け取ったファイル名でファイルを作成
-	uploadedFile, err := os.Create(createPATH + "/" + randomName)
-	fmt.Printf("imgFile => %v\n", uploadedFile)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	//作ったファイルに読み込んだファイルの内容を丸ごとコピー
-	_, err = io.Copy(uploadedFile, file)
-	if err != nil {
-		panic(err)
-	}
+	helpers.MakeFile(filePath, randomName, file)
 
 	// materialモデルに値を格納
-	material := &models.Material{
+	material := models.Material{
 		Material_name: materialName,
 		File_name:     randomName,
 		User_id:       id,
 		Year:          year,
 		Month:         month,
 		Day:           day,
-		File_path:     materialsPATH,
+		File_path:     filePath,
 		Comment:       comment,
 	}
 
-	DB.Create(material)
+	daos.Create(material)
 
 	//helpers.Mail(userName, materialName)
 
-	return c.Render()
+	return c.Render(id, grade)
 }
 
 func (c MaterialApi) GradeMaterials() revel.Result {
@@ -121,13 +84,7 @@ func (c MaterialApi) GradeMaterials() revel.Result {
 	id := c.Session["id"]
 	grade := c.Session["grade"]
 	selectgrade := c.Params.Route.Get("grade")
-	materials := []MaterialJoinsUser{}
-	DB.Where("grade = ?", selectgrade).Table("materials").Select("materials.*, users.name, users.id").Joins("INNER JOIN users ON users.id = materials.user_id").Order("material_id desc").Limit(100).Scan(&materials)
-	for n, material := range materials {
-		material.File_path = filepath.Join(material.File_path, material.File_name)
-		materials[n] = material
-		fmt.Println(material.File_path)
-	}
+	materials := daos.ShowMaterialsByGrade(selectgrade)
 
 	return c.Render(materials, id, grade)
 }
@@ -137,15 +94,7 @@ func (c MaterialApi) Delete() revel.Result {
 	// grade := c.Session["grade"]
 	material := models.Material{}
 	material.Material_id, _ = strconv.Atoi(c.Params.Route.Get("id"))
-	DB.First(&material)
-
-	pwd, _ := os.Getwd()
-	createPATH := filepath.Join(pwd, material.File_path)
-	if err := os.Remove(createPATH + "/" + material.File_name); err != nil {
-		fmt.Println(err)
-	}
-
-	DB.Delete(&material)
+	daos.Delete(material)
 
 	c.Flash.Success("削除完了しました")
 	return c.Redirect(routes.User.Mypage())
@@ -158,7 +107,7 @@ func (c MaterialApi) EditIndex() revel.Result {
 
 	material := models.Material{}
 	material.Material_id = material_id
-	DB.First(&material)
+	material = daos.ShowMaterial(material)
 	material_name := material.Material_name
 	year := material.Year
 	month := material.Month
@@ -176,24 +125,14 @@ func (c MaterialApi) Edit() revel.Result {
 
 	material := models.Material{}
 	material.Material_id, _ = strconv.Atoi(c.Params.Route.Get("id"))
-	DB.First(&material)
-	material.Year, _ = strconv.Atoi(c.Params.Form.Get("year"))
-	material.Month, _ = strconv.Atoi(c.Params.Form.Get("month"))
-	material.Day, _ = strconv.Atoi(c.Params.Form.Get("day"))
-	material.Material_name = materialName
-	material.Comment = comment
-	DB.Save(&material)
+	daos.Edit(material, materialName, comment)
 
 	c.Flash.Success("編集完了しました")
 	return c.Redirect(routes.User.Mypage())
 }
 
 func (c MaterialApi) File() revel.Result {
-	pwd, _ := os.Getwd()
-	path := filepath.Join("/materials/", c.Params.Route.Get("grade"))
-	path = filepath.Join(path, c.Params.Route.Get("user_id"))
-	path = filepath.Join(path, c.Params.Route.Get("file_path"))
-	path = filepath.Join(pwd, path)
+	path := helpers.GetPath(c.Params.Route.Get("user_id"), c.Params.Route.Get("file_path"))
 	f, err := os.Open(path)
 	if err != nil {
 		fmt.Println("エラーだよ")

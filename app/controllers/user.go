@@ -1,10 +1,9 @@
 package controllers
 
 import (
+	"SemiRevel/app/daos"
 	"SemiRevel/app/helpers"
-	"SemiRevel/app/models"
 	"fmt"
-	"path/filepath"
 
 	"github.com/revel/revel"
 )
@@ -22,16 +21,9 @@ func (c User) Index() revel.Result {
 func (c User) Mypage() revel.Result {
 	id := c.Session["id"]
 	grade := c.Session["grade"]
-	materials := []MaterialJoinsUser{}
-	DB.Where("id = ?", id).Table("materials").Select("materials.*, users.name, users.id").Joins("INNER JOIN users ON users.id = materials.user_id").Order("material_id desc").Limit(100).Scan(&materials)
-	for n, material := range materials {
-		material.File_path = filepath.Join(material.File_path, material.File_name)
-		materials[n] = material
+	materials := daos.MyMaterials(id)
 
-	}
-
-	user := models.User{}
-	DB.Where("id = ?", id).First(&user)
+	user := daos.ShowUser(id)
 	thesis := user.Thesis
 
 	return c.Render(materials, id, grade, thesis)
@@ -47,8 +39,7 @@ func (c User) Password() revel.Result {
 	id := c.Session["id"]
 	//grade := c.Session["grade"]
 
-	user := models.User{}
-	DB.Where("id = ?", id).First(&user)
+	user := daos.ShowUser(id)
 
 	password := helpers.ToHash(c.Params.Form.Get("password"))
 	newpassword1 := c.Params.Form.Get("new_password1")
@@ -66,7 +57,7 @@ func (c User) Password() revel.Result {
 	} else {
 
 		newpassword1 = helpers.ToHash(newpassword1)
-		DB.Model(&user).Update("password", newpassword1).Where("id = ?", id)
+		daos.UpdatePassword(id, newpassword1)
 		c.Flash.Success("passwordが変更できました．")
 	}
 
@@ -76,9 +67,7 @@ func (c User) Password() revel.Result {
 func (c User) Thesis() revel.Result {
 	id := c.Session["id"]
 	grade := c.Session["grade"]
-	users := []models.User{}
-	DB.Table("users").Select("users.name, users.thesis").Scan(&users)
-
+	users := daos.ShowThesis()
 	return c.Render(users, id, grade)
 }
 
@@ -86,8 +75,7 @@ func (c User) UpdateThesis() revel.Result {
 	id := c.Session["id"]
 	grade := c.Session["grade"]
 	thesis := c.Params.Form.Get("thesis")
-	user := models.User{}
-	DB.Model(&user).Where("id = ?", id).Update("thesis", thesis)
+	daos.UpdateThesis(id, thesis)
 
 	return c.Render(id, grade)
 }

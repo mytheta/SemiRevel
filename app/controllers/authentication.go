@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"SemiRevel/app/daos"
 	"SemiRevel/app/helpers"
 	"SemiRevel/app/models"
 	"SemiRevel/app/routes"
@@ -17,7 +18,7 @@ func (c Authentication) Login() revel.Result {
 	id := c.Params.Form.Get("id")
 	password := helpers.ToHash(c.Params.Form.Get("password"))
 	user := models.User{}
-	DB.Where("id = ?", id).First(&user)
+	user = daos.ShowUser(id)
 
 	if password == user.Password {
 		c.Session["id"] = id

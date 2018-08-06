@@ -1,4 +1,4 @@
-package controllers
+package daos
 
 import (
 	"SemiRevel/app/models"
@@ -15,7 +15,7 @@ func InitDB() {
 	// gormでMySQL接続
 	// 失敗したらerrに格納される
 	// Openの第二引数は {username}:{password}@/{dbname}?charset=utf8&parseTime=True&loc=Local
-	db, err := gorm.Open("mysql", "revel:revel@/semirevel?charset=utf8&parseTime=True&loc=Local")
+	db, err := gorm.Open("mysql", "revel:revel@tcp(172.18.0.2:3306)/semirevel?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		fmt.Println(err)
 	}

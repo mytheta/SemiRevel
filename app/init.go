@@ -1,7 +1,7 @@
 package app
 
 import (
-	"SemiRevel/app/controllers"
+	"SemiRevel/app/daos"
 
 	"github.com/revel/revel"
 )
@@ -38,7 +38,7 @@ func init() {
 	// revel.OnAppStart(InitDB)
 	// revel.OnAppStart(FillCache)
 
-	revel.OnAppStart(controllers.InitDB)
+	revel.OnAppStart(daos.InitDB)
 }
 
 // HeaderFilter adds common security headers
