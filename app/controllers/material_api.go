@@ -40,7 +40,7 @@ func (c MaterialApi) Create(file *os.File) revel.Result {
 	id := c.Session["id"]
 
 	//user := dao.ShowUser(id)
-	//userName := daos.ShowUserName(id)
+	userName := daos.ShowUserName(id)
 
 	c.Validation.Required(materialName).Message("この項目は必須項目です").Key("material_name")
 	c.Validation.Required(comment).Message("この項目は必須項目です").Key("comment")
@@ -74,7 +74,7 @@ func (c MaterialApi) Create(file *os.File) revel.Result {
 
 	daos.Create(material)
 
-	//helpers.Mail(userName, materialName)
+	helpers.Mail(userName, materialName)
 
 	return c.Render(id, grade)
 }

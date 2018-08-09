@@ -14,7 +14,7 @@ GET     /SemiRevel/home                                      App.Home
 GET     /SemiRevel/create                                    MaterialApi.Index
 POST    /SemiRevel/create                                    MaterialApi.Create
 GET     /SemiRevel/materials/:grade                          MaterialApi.GradeMaterials
-GET     /SemiRevel/materials/:grade/:user_id/:file_path      MaterialApi.File
+GET     /SemiRevel/materials/:user_id/:file_path      MaterialApi.File
 GET     /SemiRevel/mypage/                                   User.Mypage
 GET     /SemiRevel/user/password/                            User.Input
 POST    /SemiRevel/user/password/                            User.Password
