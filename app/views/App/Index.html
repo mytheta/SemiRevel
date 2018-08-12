@@ -1,34 +1,64 @@
-<!DOCTYPE html>
-<html lang="ja">
-	<head>
-		<meta charset="utf-8">
- 	 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
- 	 	<meta name="viewport" content="width=device-width, initial-scale=1">
- 	 	<title>ゼミ資料管理システム</title>
- 		<link href="/public/css/bootstrap-3.3.6.min.css" rel="stylesheet">
- 		<link href="/public/css/signin.css" rel="stylesheet">
-	</head>
-	<body>
-		<div class="jumbotron text-center" style="background-color:#FFF;color:#000">
- 	 		<h1 class="text-center">ゼミ資料管理システム</h1>
- 	 	</div>
- 	 	<div class="container">
 
-        	<form class="form-signin" action="/SemiRevel/login" method="POST">
-	        	<h2 class="form-signin-heading text-center">Please sign in</h2>
+{{template "header.html" .}}
+
+  <style type="text/css">
+    body {
+      background-color: #DADADA;
+    }
+    body > .grid {
+      height: 100%;
+    }
+    .image {
+      margin-top: -100px;
+    }
+    .column {
+      max-width: 450px;
+    }
+  </style>
+<body>
+	 	<!-- <div class="container"> -->
+		<br>
+		<br>
+		<br>
+		<div class="ui middle aligned center aligned grid">
+		  <div class="column">
+		    <h2 class="ui teal image header">
+		      <img src="/public/img/login.png" class="image">
+		      <div class="content">
+		        ゼミ資料管理システム
+		      </div>
+		    </h2>
+
+
+					<form class="ui large form" action="/SemiRevel/login" method="POST">
 						{{.flash.success}}
 						{{.flash.error}}
-	       		<input type="text" name="id" class="form-control" placeholder="User Id" maxlength="12" required autofocus>
-	      	    <input type="password" name="password" class="form-control" placeholder="Password" maxlength="12" required>
-	     	    <button class="btn btn-lg btn-primary btn-block" type="submit" name="login" value="Login">Sign in</button>
-      		</form>
+						<form class="ui large form">
+       <div class="ui stacked segment">
+         <div class="field">
+           <div class="ui left icon input">
+             <i class="user icon"></i>
+						    <input type="text" name="id"  placeholder="User Id" maxlength="12" required autofocus>
+						  </div>
+							 </div>
+							 <div class="field">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+						     <input type="password" name="password" placeholder="Password" maxlength="12" required>
+							 </div>
+        </div>
+				 <button class="ui fluid large teal submit button" type="submit" name="login" value="Login"  tabindex="0" role="button">Login</button>
+      </div>
+			<div class="ui error message"></div>
+
+	     </form>
+
 		</div> <!-- container -->
+	</div>
 		<br><br>
 
 		<hr>
  		<div class="footer"><p>&nbsp;&nbsp;&nbsp;&copy; by yutsukimiyashita</p></div>
 
-  		<script src="/public/js/all.min.js"></script>
- 		<script src="/public/js/bootstrap.min.js"></script>
 	</body>
 </html>

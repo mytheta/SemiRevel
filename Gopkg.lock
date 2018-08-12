@@ -2,41 +2,70 @@
 
 
 [[projects]]
+  digest = "1:850c49ca338a10fec2cb9e78f793043ed23965489d09e30bcc19fe29719da313"
   name = "github.com/go-sql-driver/mysql"
   packages = ["."]
+  pruneopts = "UT"
   revision = "a0583e0143b1624142adab07e0e97fe106d99561"
   version = "v1.3"
 
 [[projects]]
+  digest = "1:b6f4477f09f11785097a121811f3a90d8d26cab73c1aa71abda859bdf6ad2334"
   name = "github.com/jinzhu/gorm"
   packages = [
     ".",
-    "dialects/mysql"
+    "dialects/mysql",
   ]
+  pruneopts = "UT"
   revision = "6ed508ec6a4ecb3531899a69cbc746ccf65a4166"
   version = "v1.9.1"
 
 [[projects]]
   branch = "master"
+  digest = "1:fd97437fbb6b7dce04132cf06775bd258cce305c44add58eb55ca86c6c325160"
   name = "github.com/jinzhu/inflection"
   packages = ["."]
+  pruneopts = "UT"
   revision = "04140366298a54a039076d798123ffa108fff46c"
 
 [[projects]]
+  digest = "1:f69eecd55672a7a5ac2ac1f51df3269503c87cc6b6a6c25d81c38489d958a29f"
+  name = "github.com/revel/modules"
+  packages = [
+    "static/app/controllers",
+    "testrunner/app",
+    "testrunner/app/controllers",
+  ]
+  pruneopts = "UT"
+  revision = "f97a4d0320f4ee755526333a0286f787a5bf6d8b"
+  version = "v0.19.0"
+
+[[projects]]
+  digest = "1:4bd2885c01f54d188ff9520c608961f61c5ce627f41da72245235ea13ba00458"
   name = "github.com/revel/revel"
   packages = ["testing"]
+  pruneopts = "UT"
   revision = "248166bf840eab87a88d1c18309f8e174e8327ff"
   version = "v0.19.1"
 
 [[projects]]
   branch = "master"
+  digest = "1:845c2878ddaa174523d1e096d61e0ebb349855d81dde54e6dbc2c3dbf431b68a"
   name = "golang.org/x/net"
   packages = ["websocket"]
+  pruneopts = "UT"
   revision = "b3c676e531a6dc479fa1b35ac961c13f5e2b4d2e"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "7e656337d0dd8d2d45d2f5eb8d72d8a907e7be1e5de56342b8c19f6e6eb1660e"
+  input-imports = [
+    "github.com/jinzhu/gorm",
+    "github.com/jinzhu/gorm/dialects/mysql",
+    "github.com/revel/modules/static/app/controllers",
+    "github.com/revel/modules/testrunner/app",
+    "github.com/revel/modules/testrunner/app/controllers",
+    "github.com/revel/revel/testing",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1
