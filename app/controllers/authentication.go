@@ -28,7 +28,7 @@ func (c Authentication) Login() revel.Result {
 		c.Flash.Error("パスワードが違います．")
 		return c.Redirect(routes.App.Index())
 	}
-	return c.Redirect(routes.App.Home())
+	return c.Redirect(routes.MaterialApi.Home())
 }
 
 func (c Authentication) Logout() revel.Result {

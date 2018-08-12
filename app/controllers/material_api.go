@@ -22,6 +22,16 @@ type MaterialJoinsUser struct {
 	models.User
 }
 
+func (c MaterialApi) Home() revel.Result {
+
+	id := c.Session["id"]
+	grade := c.Session["grade"]
+	materials := daos.ShowMaterialLimitTen()
+
+	return c.Render(materials, id, grade)
+
+}
+
 func (c MaterialApi) Index() revel.Result {
 	id := c.Session["id"]
 	grade := c.Session["grade"]
