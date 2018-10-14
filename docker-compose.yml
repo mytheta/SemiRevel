@@ -21,5 +21,5 @@ services:
         ports:
             - "9090:9000" #ポート9000番の開放
         links:
-            - "db:mysql" #dbとつなげる
+            - db
         command: revel run SemiRevel #docker-compose up の際にアプリケーション実行
