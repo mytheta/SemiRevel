@@ -6,11 +6,6 @@ services:
           - "./:/go/src/SemiRevel"
         ports:
             - "9090:9000" #ポート9000番の開放
-<<<<<<< HEAD
-=======
-        links:
-            - db
->>>>>>> 4e69c69113e0dd57b010cdbb361ed9feb6efa371
         command: revel run SemiRevel #docker-compose up の際にアプリケーション実行
 
 networks:
